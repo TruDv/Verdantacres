@@ -1,0 +1,262 @@
+---
+// src/pages/operations.astro
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+<Layout title="Operations | Verdant Acres Limited — Integrated Value Chain">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJzLwV8pA0/DkU8T9z+K+k7pQkU2qJ1iT9G8wA5p8p+R/9yC7b+7Gk5c8eA==" crossorigin="anonymous" referrerpolicy="no-referrer" slot="head-end" />
+
+    <style>
+        :root {
+            --color-primary: #DAA520; /* Gold */
+            --color-corporate: #1B5E20; /* Deep Green */
+            --color-surface: #FAFAFA; /* Light Grey */
+        }
+        /* Custom Tailwind/CSS mappings for variables */
+        .text-primary { color: var(--color-primary); }
+        .bg-primary { background-color: var(--color-primary); }
+        .border-primary { border-color: var(--color-primary); }
+        .text-corporate { color: var(--color-corporate); }
+        .bg-corporate { background-color: var(--color-corporate); }
+        .border-corporate { border-color: var(--color-corporate); }
+        .bg-surface { background-color: var(--color-surface); }
+        
+        /* Font mappings based on your Layout.astro imports */
+        .font-heading { font-family: 'Satoshi', sans-serif; }
+
+        /* Custom flow line style */
+        .flow-line {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: var(--color-primary);
+            border-radius: 2px;
+            /* Hide line on mobile for clean vertical flow */
+            display: none;
+        }
+
+        @media (min-width: 1024px) {
+            .flow-line {
+                display: block;
+            }
+        }
+        
+        /* Optional: CSS for carousel items, if this page ever uses a carousel */
+        .carousel-item { 
+            opacity: 0; 
+            transition: opacity 1s ease-in-out; 
+        }
+        .carousel-item.active { opacity: 1; }
+        
+    </style>
+
+    <Header slot="header" />
+
+    <section class="relative h-96 flex items-center bg-corporate">
+        <div class="absolute inset-0">
+            <img
+                src="/assets/operations.jpg"
+                alt="State-of-the-art processing facility"
+                class="w-full h-full object-cover opacity-50"
+                onerror="this.src='https://placehold.co/1920x400/1B5E20/111827?text=Modern+Operations'"
+            />
+            <div class="absolute inset-0 bg-corporate/40 backdrop-brightness-50"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
+            <p class="text-sm uppercase tracking-widest font-bold text-primary mb-2">Operational Excellence</p>
+            <h1 class="text-4xl md:text-6xl font-black font-heading leading-tight">
+                Integrated, Efficient, and Scalable
+            </h1>
+            <p class="text-lg mt-4 max-w-3xl opacity-90">
+                Our operations are built on a secure supply chain, state-of-the-art processing technology, and a commitment to maximizing value from every part of the coconut.
+            </p>
+        </div>
+    </section>
+
+    <section class="py-24 bg-surface">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-4xl font-black font-heading text-corporate mb-4">
+                Driving the Coconut Value Chain
+            </h2>
+            <p class="text-xl text-gray-600 mb-16 max-w-3xl mx-auto">
+                Our strategic advantage lies in the complete integration of our operations, guaranteeing quality and consistency from farm to market.
+            </p>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-2xl shadow-xl border-b-4 border-primary transition-transform duration-300 hover:shadow-2xl hover:-translate-y-1">
+                    <i class="fas fa-tree-city text-5xl text-corporate mb-4"></i>
+                    <p class="text-4xl font-black font-heading text-primary">11,000</p>
+                    <p class="text-xl font-bold text-corporate mt-2">Hectares of Exclusive Plantation</p>
+                    <p class="text-gray-500 text-sm mt-2">Ensuring secure and high-volume raw material supply.</p>
+                </div>
+                
+                <div class="bg-white p-8 rounded-2xl shadow-xl border-b-4 border-primary transition-transform duration-300 hover:shadow-2xl hover:-translate-y-1">
+                    <i class="fas fa-industry text-5xl text-corporate mb-4"></i>
+                    <p class="text-4xl font-black font-heading text-primary">22 TPD</p>
+                    <p class="text-xl font-bold text-corporate mt-2">Processing Capacity</p>
+                    <p class="text-gray-500 text-sm mt-2">State-of-the-art mill ready for efficient, industrial-scale output.</p>
+                </div>
+                
+                <div class="bg-white p-8 rounded-2xl shadow-xl border-b-4 border-primary transition-transform duration-300 hover:shadow-2xl hover:-translate-y-1 sm:col-span-2 lg:col-span-1">
+                    <i class="fas fa-recycle text-5xl text-corporate mb-4"></i>
+                    <p class="text-4xl font-black font-heading text-primary">100%</p>
+                    <p class="text-xl font-bold text-corporate mt-2">Integrated Value Chain</p>
+                    <p class="text-gray-500 text-sm mt-2">Maximizing yield from every coconut component (Zero-Waste focus).</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-center text-3xl md:text-4xl font-black font-heading text-corporate mb-20">
+            Our End-to-End Value Chain
+        </h2>
+
+        <div class="relative max-w-5xl mx-auto">
+            <div class="flow-line"></div>
+
+            <div class="space-y-20">
+
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="lg:order-1 lg:text-right space-y-4">
+                        <span class="inline-block text-xl font-black text-primary font-heading mb-2">01. Sourcing & Cultivation</span>
+                        <h3 class="text-3xl font-black font-heading text-corporate">Secure Supply Security</h3>
+                        <p class="text-lg text-gray-700">
+                            Raw material reliability is paramount. We draw from our proprietary 11,000-hectare plantation and a robust outgrower network, ensuring both volume consistency and community empowerment through sustainable farming practices.
+                        </p>
+                        <ul class="list-disc list-inside text-gray-600 space-y-1 pt-2 inline-block">
+                            <li>Proprietary Plantation Management</li>
+                            <li>Strong Farmer Outgrower Network</li>
+                            <li>Sustainable Harvesting Methods</li>
+                        </ul>
+                    </div>
+                    <div class="lg:order-2">
+                        <div class="relative p-2 bg-corporate rounded shadow-2xl overflow-hidden">
+                            <img
+                                src="/assets/Coconut-Plantation.jpg"
+                                alt="Coconut Plantation"
+                                class="w-full h-72 object-cover rounded-sm opacity-90"
+                                onerror="this.src='https://placehold.co/600x400/DAA520/1B5E20?text=Sourcing+and+Plantation'"
+                            />
+                            <div class="absolute lg:top-1/2 lg:-left-20 top-0 left-0 lg:transform lg:-translate-y-1/2 lg:w-10 lg:h-10 w-8 h-8 bg-corporate rounded-full flex items-center justify-center border border-primary shadow-xl">
+                                <i class="fas fa-leaf text-white text-sm"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="lg:order-2">
+                       <div class="relative p-2 bg-corporate rounded shadow-2xl overflow-hidden">
+                            <img
+                                src="/assets/Mill.jpg"
+                                alt="Industrial coconut mill equipment"
+                                class="w-full h-72 object-cover rounded-sm opacity-90"
+                                onerror="this.src='https://placehold.co/600x400/DAA520/1B5E20?text=Advanced+Processing'"
+                            />
+                            <div class="absolute lg:top-1/2 lg:-right-20 top-0 right-0 lg:transform lg:-translate-y-1/2 lg:w-10 lg:h-10 w-8 h-8 bg-corporate rounded-full flex items-center justify-center border border-primary shadow-xl">
+                                <i class="fas fa-industry text-white text-sm"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:order-1 space-y-4">
+                        <span class="inline-block text-xl font-black text-primary font-heading mb-2">02. Modern Processing</span>
+                        <h3 class="text-3xl font-black font-heading text-corporate">22 TPD State-of-the-Art Mill</h3>
+                        <p class="text-lg text-gray-700">
+                            Our modern processing facility utilizes advanced technology, including high-efficiency cold-press machinery, to extract premium Virgin Coconut Oil while maintaining minimal degradation and maximum nutritional value.
+                        </p>
+                        <ul class="list-disc list-inside text-gray-600 space-y-1 pt-2">
+                            <li>Cold-Press Extraction Technology</li>
+                            <li>ISO 22000 Ready Procedures</li>
+                            <li>Efficient, Industrial-Scale Output</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="lg:order-1 lg:text-right space-y-4">
+                        <span class="inline-block text-xl font-black text-primary font-heading mb-2">03. Zero-Waste Value Addition</span>
+                        <h3 class="text-3xl font-black font-heading text-corporate">Integrated Co-Product Utilization</h3>
+                        <p class="text-lg text-gray-700">
+                            Operational efficiency means utilizing 100% of the raw material. The residual products—coconut meal, coir, and shells—are processed into valuable co-products for the feed, horticulture, and energy sectors.
+                        </p>
+                        <ul class="list-disc list-inside text-gray-600 space-y-1 pt-2 inline-block">
+                            <li>Copra Cake (Animal Feed) Production</li>
+                            <li>Coir Fiber Extraction</li>
+                            <li>Shells as Biomass Fuel for Mill</li>
+                        </ul>
+                    </div>
+                    <div class="lg:order-2">
+                        <div class="relative p-2 bg-corporate rounded shadow-2xl overflow-hidden">
+                            <img
+                                src="/assets/Byproducts.jpeg"
+                                alt="Co-products stacked (charcoal, coir, meal)"
+                                class="w-full h-72 object-cover rounded-sm opacity-90"
+                                onerror="this.src='https://placehold.co/600x400/DAA520/1B5E20?text=Zero+Waste+Processing'"
+                            />
+                            <div class="absolute lg:top-1/2 lg:-left-20 top-0 left-0 lg:transform lg:-translate-y-1/2 lg:w-10 lg:h-10 w-8 h-8 bg-corporate rounded-full flex items-center justify-center border border-primary shadow-xl">
+                                <i class="fas fa-recycle text-white text-sm"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="lg:order-2">
+                       <div class="relative p-2 bg-corporate rounded shadow-2xl overflow-hidden">
+                            <img
+                                src="/assets/Refinery7.png"
+                                alt="Laboratory testing and packaging"
+                                class="w-full h-72 object-cover rounded-sm opacity-90"
+                                onerror="this.src='https://placehold.co/600x400/DAA520/1B5E20?text=Quality+and+Logistics'"
+                            />
+                            <div class="absolute lg:top-1/2 lg:-right-20 top-0 right-0 lg:transform lg:-translate-y-1/2 lg:w-10 lg:h-10 w-8 h-8 bg-corporate rounded-full flex items-center justify-center border border-primary shadow-xl">
+                                <i class="fas fa-box-open text-white text-sm"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:order-1 space-y-4">
+                        <span class="inline-block text-xl font-black text-primary font-heading mb-2">04. Quality & Logistics</span>
+                        <h3 class="text-3xl font-black font-heading text-corporate">Global Market Readiness</h3>
+                        <p class="text-lg text-gray-700">
+                            Every batch undergoes stringent quality assurance testing for purity and compliance. Our products are packaged for large-scale export and backed by a robust logistics network for reliable, timely global delivery.
+                        </p>
+                        <ul class="list-disc list-inside text-gray-600 space-y-1 pt-2">
+                            <li>Comprehensive Lab Traceability</li>
+                            <li>Export Packaging Standards</li>
+                            <li>Strong Distribution Network</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-corporate text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-4xl font-black font-heading mb-8">
+                Partner with Operational Stability
+            </h2>
+            <p class="text-xl opacity-90 mb-12 max-w-4xl mx-auto">
+                Verdant Acres provides the supply security and quality control required for long-term commercial relationships in demanding international markets.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                <a href="/contact" class="bg-primary text-corporate font-bold text-lg py-5 px-12 rounded-full hover:bg-white hover:text-corporate transition duration-300 shadow-xl">
+                    Discuss Commercial Supply
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+    <Footer slot="footer" />
+
+</Layout>

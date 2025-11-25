@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.carousel-item { 
+    opacity: 0; 
+    transition: opacity 1s ease-in-out; /* Use 1s for simplicity, or 1.5s if preferred */
+}
+.carousel-item.active { opacity: 1; }
+
+.transition-all-200 { transition: all 200ms ease-in-out; }
+#image-carousel-container { background-color: #f0fdf4; }

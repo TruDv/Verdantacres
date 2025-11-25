@@ -1,0 +1,73 @@
+---
+// src/components/Footer.astro
+---
+<footer class="bg-neutral-900 text-white py-16">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-10 text-center md:text-left">
+
+      <div class="md:col-span-1">
+        <a href="/" class="flex items-center justify-center md:justify-start">
+          <img 
+            src="/assets/Logo-F.png" 
+            alt="Verdant Acres Logo" 
+            class="w-24 h-24 object-contain" 
+          />
+        </a>
+        <p class="text-white/80 text-sm leading-relaxed mb-6">
+          Pioneering West Africa’s fully integrated coconut value chain from 11,000 hectares of sustainable plantations to premium, export-ready Virgin Coconut Oil.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-primary font-black text-lg mb-5">Quick Links</h3>
+        <ul class="space-y-3 text-white/80 text-sm">
+          <li><a href="/" class="hover:text-primary transition">Home</a></li>
+          <li><a href="/about" class="hover:text-primary transition">About Us</a></li>
+          <li><a href="/operations" class="hover:text-primary transition">Operations</a></li>
+          <li><a href="/products" class="hover:text-primary transition">Products</a></li>
+          <li><a href="/sustainability" class="hover:text-primary transition">Sustainability</a></li>
+          <li><a href="/team" class="hover:text-primary transition">Our Team</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-primary font-black text-lg mb-5">Get in Touch</h3>
+        <ul class="space-y-4 text-white/80 text-sm">
+          <li class="flex items-center justify-center md:justify-start gap-3">
+            <i class="fas fa-envelope text-primary"></i>
+            <a href="mailto:info@verdantacres.com" class="hover:text-primary transition">info@verdantacres.com</a>
+          </li>
+          <li class="flex items-center justify-center md:justify-start gap-3">
+            <i class="fas fa-phone text-primary"></i>
+            <span>+234 (0) 906 2834 201, <br> +234 (0) 906 2834 202</span>
+          </li>
+          <li class="flex items-center justify-center md:justify-start gap-3">
+            <i class="fas fa-map-marker-alt text-primary"></i>
+            <span>24c Dr Omon Ebhomenye Street, <br>Lekki Phase 1 Lagos, Nigeria</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="md:col-span-1">
+        <h3 class="text-primary font-black text-lg mb-5">Partner With Us</h3>
+        <p class="text-white/80 text-sm mb-6">
+          Secure supply. Sustainable impact. Strong returns.
+        </p>
+        <a href="/contact" class="inline-block bg-primary text-neutral-900 font-bold py-4 px-8 rounded-full hover:bg-white transition shadow-xl">
+          Explore Opportunities
+        </a>
+      </div>
+    </div>
+
+    <div class="border-t border-white/20 mt-12 pt-8 text-center text-white/60 text-sm">
+      <p>
+        © <span id="year">{new Date().getFullYear()}</span> Verdant Acres Limited. All Rights Reserved. 
+        | Integrated Coconut Agribusiness • Nigeria
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .font-heading { font-family: 'Satoshi', sans-serif; }
+</style>

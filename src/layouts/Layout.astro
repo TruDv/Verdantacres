@@ -1,25 +1,29 @@
 ---
 // src/layouts/Layout.astro
 export interface Props {
-  title: string;
+  title: string;
 }
 const { title } = Astro.props;
 ---
 <!doctype html>
 <html lang="en" class="scroll-smooth">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
-    <meta name="description" content="11,000 ha plantation • 22 TPD processing • Zero-waste • Export-ready VCO" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Satoshi:wght@500;700;900&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  </head>
-  <body class="antialiased bg-white text-gray-800">
-    <slot name="header" />
-    <main>
-      <slot />
-    </main>
-    <slot name="footer" />
-  </body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content="11,000 ha plantation • 22 TPD processing • Zero-waste • Export-ready VCO" />
+    
+    <!-- FAVICON: Link to your favicon.png, assuming it's placed in the project's public/ folder -->
+    <link rel="icon" type="image/png" href="/favicon.png">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Satoshi:wght@500;700;900&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  </head>
+  <body class="antialiased bg-white text-gray-800">
+    <slot name="header" />
+    <main>
+      <slot />
+    </main>
+    <slot name="footer" />
+  </body>
 </html>

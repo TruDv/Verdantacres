@@ -9,7 +9,7 @@ export default {
         signature: ['"Dancing Script"', 'cursive'],
       },
       colors: {
-        primary: '#DAA520',
+        primary: '#af8737',
         corporate: '#1B5E20',
         dark: '#111827',
         light: '#F5F5F5',

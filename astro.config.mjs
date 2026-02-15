@@ -1,11 +1,9 @@
 import { defineConfig } from 'astro/config';
-// 1. Import the official Astro Tailwind integration
 import tailwind from '@astrojs/tailwind';
+import vercel from '@astrojs/vercel/serverless';
 
 export default defineConfig({
-  // 2. Register the Tailwind integration here
+  output: 'server', // This enables API routes
+  adapter: vercel(), // This adapts your site for Vercel
   integrations: [tailwind()],
-
-  // Ensure you have any other necessary settings here (e.g., output: 'server')
-  // The 'vite' block is only needed for custom Vite plugins, not for Astro integrations.
 });

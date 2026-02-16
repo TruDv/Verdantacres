@@ -297,45 +297,66 @@ import Footer from '../components/Footer.astro';
         }
         
         // Form submission handling
-        document.getElementById('contact-form')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const form = e.target;
-            const submitBtn = document.getElementById('submit-btn');
-            const submitText = document.getElementById('submit-text');
-            const submitSpinner = document.getElementById('submit-spinner');
-            const formData = new FormData(form);
-            
-            // Disable submit button and show loading state
-            submitBtn.disabled = true;
-            submitText.classList.add('hidden');
-            submitSpinner.classList.remove('hidden');
-            
-            try {
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const result = await response.json();
-                
-                if (response.ok && result.success) {
-                    // Show success message
-                    showToast('success', 'Success!', 'Your message has been sent. We\'ll get back to you within one business day.');
-                    form.reset();
-                } else {
-                    // Show error message
-                    showToast('error', 'Error!', result.error || 'Failed to send message. Please try again.');
-                }
-            } catch (error) {
-                console.error('Form submission error:', error);
-                showToast('error', 'Error!', 'Network error. Please check your connection and try again.');
-            } finally {
-                // Re-enable submit button and hide loading state
-                submitBtn.disabled = false;
-                submitText.classList.remove('hidden');
-                submitSpinner.classList.add('hidden');
-            }
+    
+document.getElementById('contact-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const form = e.target;
+    const submitBtn = document.getElementById('submit-btn');
+    const submitText = document.getElementById('submit-text');
+    const submitSpinner = document.getElementById('submit-spinner');
+    const formData = new FormData(form);
+    
+    // Disable submit button and show loading state
+    submitBtn.disabled = true;
+    submitText.classList.add('hidden');
+    submitSpinner.classList.remove('hidden');
+    
+    try {
+        console.log('🚀 Sending form data to:', form.action);
+        
+        const response = await fetch(form.action, {
+            method: 'POST',
+            body: formData
         });
+        
+        console.log('📥 Response status:', response.status);
+        console.log('📥 Response headers:', response.headers.get('content-type'));
+        
+        // Get the response text first
+        const responseText = await response.text();
+        console.log('📥 Raw response:', responseText);
+        
+        // Try to parse as JSON
+        let result;
+        try {
+            result = JSON.parse(responseText);
+            console.log('✅ Parsed JSON:', result);
+        } catch (jsonError) {
+            console.error('❌ JSON parse error:', jsonError);
+            // Show the raw response in the toast
+            showToast('error', 'Server Error!', `Received: ${responseText.substring(0, 100)}`);
+            return;
+        }
+        
+        if (response.ok && result.success) {
+            // Show success message
+            showToast('success', 'Success!', 'Your message has been sent. We\'ll get back to you within one business day.');
+            form.reset();
+        } else {
+            // Show error message
+            showToast('error', 'Error!', result.error || 'Failed to send message. Please try again.');
+        }
+        
+    } catch (error) {
+        console.error('❌ Form submission error:', error);
+        showToast('error', 'Error!', 'Network error. Please check your connection and try again.');
+    } finally {
+        // Re-enable submit button and hide loading state
+        submitBtn.disabled = false;
+        submitText.classList.remove('hidden');
+        submitSpinner.classList.add('hidden');
+    }
+});
     </script>
 </Layout>

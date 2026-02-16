@@ -1,5 +1,5 @@
-import { i as isRemoteAllowed, j as joinPaths, a as isRemotePath, t as typeHandlers, b as types } from './index_ChlblgGj.mjs';
-import { A as AstroError, E as ExpectedImage, L as LocalImageUsedWrongly, M as MissingImageDimension, U as UnsupportedImageFormat, I as IncompatibleDescriptorOptions, a as UnsupportedImageConversion, t as toStyleString, N as NoImageMetadata, F as FailedToFetchRemoteImageDimensions, b as ExpectedImageOptions, c as ExpectedNotESMImage, d as InvalidImageService, e as createComponent, f as createAstro, g as ImageMissingAlt, m as maybeRenderHead, h as addAttribute, s as spreadAttributes, r as renderTemplate, i as ExperimentalFontsNotEnabled, j as FontFamilyNotFound, u as unescapeHTML } from './astro/server_DJMObuCY.mjs';
+import { i as isRemoteAllowed, j as joinPaths, a as isRemotePath, t as typeHandlers, b as types } from './index_ty8FbXfT.mjs';
+import { A as AstroError, E as ExpectedImage, L as LocalImageUsedWrongly, M as MissingImageDimension, U as UnsupportedImageFormat, I as IncompatibleDescriptorOptions, a as UnsupportedImageConversion, t as toStyleString, N as NoImageMetadata, F as FailedToFetchRemoteImageDimensions, b as ExpectedImageOptions, c as ExpectedNotESMImage, d as InvalidImageService, e as createComponent, f as ImageMissingAlt, m as maybeRenderHead, g as addAttribute, s as spreadAttributes, r as renderTemplate, h as createAstro, i as ExperimentalFontsNotEnabled, j as FontFamilyNotFound, u as unescapeHTML } from './astro/server_D86D_h2o.mjs';
 import 'clsx';
 import * as mime from 'mrmime';
 import 'piccolore';
@@ -23,7 +23,8 @@ const DEFAULT_HASH_PROPS = [
   "format",
   "quality",
   "fit",
-  "position"
+  "position",
+  "background"
 ];
 
 const DEFAULT_RESOLUTIONS = [
@@ -156,60 +157,63 @@ function parseQuality(quality) {
   return result;
 }
 const sortNumeric = (a, b) => a - b;
-const baseService = {
-  validateOptions(options) {
-    if (!options.src || !isRemoteImage(options.src) && !isESMImportedImage(options.src)) {
+function verifyOptions(options) {
+  if (!options.src || !isRemoteImage(options.src) && !isESMImportedImage(options.src)) {
+    throw new AstroError({
+      ...ExpectedImage,
+      message: ExpectedImage.message(
+        JSON.stringify(options.src),
+        typeof options.src,
+        JSON.stringify(options, (_, v) => v === void 0 ? null : v)
+      )
+    });
+  }
+  if (!isESMImportedImage(options.src)) {
+    if (options.src.startsWith("/@fs/") || !isRemotePath(options.src) && !options.src.startsWith("/")) {
       throw new AstroError({
-        ...ExpectedImage,
-        message: ExpectedImage.message(
-          JSON.stringify(options.src),
-          typeof options.src,
-          JSON.stringify(options, (_, v) => v === void 0 ? null : v)
+        ...LocalImageUsedWrongly,
+        message: LocalImageUsedWrongly.message(options.src)
+      });
+    }
+    let missingDimension;
+    if (!options.width && !options.height) {
+      missingDimension = "both";
+    } else if (!options.width && options.height) {
+      missingDimension = "width";
+    } else if (options.width && !options.height) {
+      missingDimension = "height";
+    }
+    if (missingDimension) {
+      throw new AstroError({
+        ...MissingImageDimension,
+        message: MissingImageDimension.message(missingDimension, options.src)
+      });
+    }
+  } else {
+    if (!VALID_SUPPORTED_FORMATS.includes(options.src.format)) {
+      throw new AstroError({
+        ...UnsupportedImageFormat,
+        message: UnsupportedImageFormat.message(
+          options.src.format,
+          options.src.src,
+          VALID_SUPPORTED_FORMATS
         )
       });
     }
-    if (!isESMImportedImage(options.src)) {
-      if (options.src.startsWith("/@fs/") || !isRemotePath(options.src) && !options.src.startsWith("/")) {
-        throw new AstroError({
-          ...LocalImageUsedWrongly,
-          message: LocalImageUsedWrongly.message(options.src)
-        });
-      }
-      let missingDimension;
-      if (!options.width && !options.height) {
-        missingDimension = "both";
-      } else if (!options.width && options.height) {
-        missingDimension = "width";
-      } else if (options.width && !options.height) {
-        missingDimension = "height";
-      }
-      if (missingDimension) {
-        throw new AstroError({
-          ...MissingImageDimension,
-          message: MissingImageDimension.message(missingDimension, options.src)
-        });
-      }
-    } else {
-      if (!VALID_SUPPORTED_FORMATS.includes(options.src.format)) {
-        throw new AstroError({
-          ...UnsupportedImageFormat,
-          message: UnsupportedImageFormat.message(
-            options.src.format,
-            options.src.src,
-            VALID_SUPPORTED_FORMATS
-          )
-        });
-      }
-      if (options.widths && options.densities) {
-        throw new AstroError(IncompatibleDescriptorOptions);
-      }
-      if (options.src.format === "svg") {
-        options.format = "svg";
-      }
-      if (options.src.format === "svg" && options.format !== "svg" || options.src.format !== "svg" && options.format === "svg") {
-        throw new AstroError(UnsupportedImageConversion);
-      }
+    if (options.widths && options.densities) {
+      throw new AstroError(IncompatibleDescriptorOptions);
     }
+    if (options.src.format === "svg" && options.format !== "svg" || options.src.format !== "svg" && options.format === "svg") {
+      throw new AstroError(UnsupportedImageConversion);
+    }
+  }
+}
+const baseService = {
+  validateOptions(options) {
+    if (isESMImportedImage(options.src) && options.src.format === "svg") {
+      options.format = "svg";
+    }
+    verifyOptions(options);
     if (!options.format) {
       options.format = DEFAULT_OUTPUT_FORMAT;
     }
@@ -239,6 +243,7 @@ const baseService = {
       priority,
       fit,
       position,
+      background,
       ...attributes
     } = options;
     return {
@@ -318,7 +323,8 @@ const baseService = {
       q: "quality",
       f: "format",
       fit: "fit",
-      position: "position"
+      position: "position",
+      background: "background"
     };
     Object.entries(params).forEach(([param, key]) => {
       options[key] && searchParams.append(param, options[key].toString());
@@ -345,7 +351,8 @@ const baseService = {
       format: params.get("f"),
       quality: params.get("q"),
       fit: params.get("fit"),
-      position: params.get("position") ?? void 0
+      position: params.get("position") ?? void 0,
+      background: params.get("background") ?? void 0
     };
     return transform;
   }
@@ -385,6 +392,7 @@ function addCSSVarsToStyle(vars, styles) {
 }
 
 const firstBytes = /* @__PURE__ */ new Map([
+  [0, "heif"],
   [56, "psd"],
   [66, "bmp"],
   [68, "dds"],
@@ -402,7 +410,7 @@ function detector(input) {
   if (type && typeHandlers.get(type).validate(input)) {
     return type;
   }
-  return types.find((fileType) => typeHandlers.get(fileType).validate(input));
+  return types.find((imageType) => typeHandlers.get(imageType).validate(input));
 }
 
 function lookup(input) {
@@ -492,7 +500,7 @@ async function getConfiguredImageService() {
   if (!globalThis?.astroAsset?.imageService) {
     const { default: service } = await import(
       // @ts-expect-error
-      './sharp_CNnGhArB.mjs'
+      './sharp_5Qmx7Ehq.mjs'
     ).catch((e) => {
       const error = new AstroError(InvalidImageService);
       error.cause = e;
@@ -747,7 +755,7 @@ const $$Picture = createComponent(async ($$result, $$props, $$slots) => {
   })}  <img${addAttribute(fallbackImage.src, "src")}${spreadAttributes(attributes)}${addAttribute(className, "class")}> </picture>`;
 }, "C:/Users/Siri/Documents/Code Base/VerdantArces/Verdant-Astro-Perfect/node_modules/astro/components/Picture.astro", void 0);
 
-const fontsMod = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const mod = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null
 }, Symbol.toStringTag, { value: 'Module' }));
 
@@ -790,19 +798,19 @@ const $$Astro = createAstro();
 const $$Font = createComponent(($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
   Astro2.self = $$Font;
-  const { internalConsumableMap } = fontsMod;
-  if (!internalConsumableMap) {
+  const { componentDataByCssVariable } = mod;
+  if (!componentDataByCssVariable) {
     throw new AstroError(ExperimentalFontsNotEnabled);
   }
   const { cssVariable, preload = false } = Astro2.props;
-  const data = internalConsumableMap.get(cssVariable);
+  const data = componentDataByCssVariable.get(cssVariable);
   if (!data) {
     throw new AstroError({
       ...FontFamilyNotFound,
       message: FontFamilyNotFound.message(cssVariable)
     });
   }
-  const filteredPreloadData = filterPreloads(data.preloadData, preload);
+  const filteredPreloadData = filterPreloads(data.preloads, preload);
   return renderTemplate`<style>${unescapeHTML(data.css)}</style>${filteredPreloadData?.map(({ url, type }) => renderTemplate`<link rel="preload"${addAttribute(url, "href")} as="font"${addAttribute(`font/${type}`, "type")} crossorigin>`)}`;
 }, "C:/Users/Siri/Documents/Code Base/VerdantArces/Verdant-Astro-Perfect/node_modules/astro/components/Font.astro", void 0);
 

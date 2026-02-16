@@ -1,13 +1,13 @@
-import { v as decryptString, w as createSlotValueFromString, x as isAstroComponentFactory, k as renderComponent, r as renderTemplate, R as ROUTE_TYPE_HEADER, y as REROUTE_DIRECTIVE_HEADER, A as AstroError, z as i18nNoLocaleFoundInPath, B as ResponseSentError, C as ActionNotFoundError, D as MiddlewareNoDataOrNextCalled, G as MiddlewareNotAResponse, H as originPathnameSymbol, J as RewriteWithBodyUsed, K as GetStaticPathsRequired, O as InvalidGetStaticPathsReturn, P as InvalidGetStaticPathsEntry, Q as GetStaticPathsExpectedParams, S as GetStaticPathsInvalidRouteParam, T as PageNumberParamNotFound, V as DEFAULT_404_COMPONENT, W as NoMatchingStaticPathFound, X as PrerenderDynamicEndpointPathCollide, Y as ReservedSlotName, Z as renderSlotToString, _ as renderJSX, $ as chunkToString, a0 as isRenderInstruction, a1 as ForbiddenRewrite, a2 as SessionStorageInitError, a3 as SessionStorageSaveError, a4 as ASTRO_VERSION, a5 as CspNotEnabled, a6 as LocalsReassigned, a7 as generateCspDigest, a8 as PrerenderClientAddressNotAvailable, a9 as clientAddressSymbol, aa as ClientAddressNotAvailable, ab as StaticClientAddressNotAvailable, ac as AstroResponseHeadersReassigned, ad as responseSentSymbol$1, ae as renderPage, af as REWRITE_DIRECTIVE_HEADER_KEY, ag as REWRITE_DIRECTIVE_HEADER_VALUE, ah as renderEndpoint, ai as LocalsNotAnObject, aj as REROUTABLE_STATUS_CODES, ak as nodeRequestAbortControllerCleanupSymbol } from './astro/server_DJMObuCY.mjs';
+import { v as decryptString, w as createSlotValueFromString, x as isAstroComponentFactory, k as renderComponent, r as renderTemplate, R as ROUTE_TYPE_HEADER, y as REROUTE_DIRECTIVE_HEADER, A as AstroError, z as i18nNoLocaleFoundInPath, B as ResponseSentError, C as ActionNotFoundError, D as MiddlewareNoDataOrNextCalled, G as MiddlewareNotAResponse, H as originPathnameSymbol, J as RewriteWithBodyUsed, K as GetStaticPathsRequired, O as InvalidGetStaticPathsReturn, P as InvalidGetStaticPathsEntry, Q as GetStaticPathsExpectedParams, S as GetStaticPathsInvalidRouteParam, T as PageNumberParamNotFound, V as DEFAULT_404_COMPONENT, W as NoMatchingStaticPathFound, X as PrerenderDynamicEndpointPathCollide, Y as ReservedSlotName, Z as renderSlotToString, _ as renderJSX, $ as chunkToString, a0 as isRenderInstruction, a1 as ForbiddenRewrite, a2 as SessionStorageInitError, a3 as SessionStorageSaveError, a4 as ASTRO_VERSION, a5 as CspNotEnabled, a6 as LocalsReassigned, a7 as generateCspDigest, a8 as PrerenderClientAddressNotAvailable, a9 as clientAddressSymbol, aa as ClientAddressNotAvailable, ab as StaticClientAddressNotAvailable, ac as AstroResponseHeadersReassigned, ad as responseSentSymbol$1, ae as renderPage, af as REWRITE_DIRECTIVE_HEADER_KEY, ag as REWRITE_DIRECTIVE_HEADER_VALUE, ah as renderEndpoint, ai as LocalsNotAnObject, aj as FailedToFindPageMapSSR, ak as REROUTABLE_STATUS_CODES, al as nodeRequestAbortControllerCleanupSymbol } from './astro/server_D86D_h2o.mjs';
 import colors from 'piccolore';
 import 'clsx';
-import { serialize, parse } from 'cookie';
-import { A as ActionError, d as deserializeActionResult, s as serializeActionResult, a as ACTION_RPC_ROUTE_PATTERN, b as ACTION_QUERY_PARAMS, g as getActionQueryString, D as DEFAULT_404_ROUTE, c as default404Instance, N as NOOP_MIDDLEWARE_FN, e as ensure404Route } from './astro-designed-error-pages_CMcrI8wh.mjs';
+import { A as ActionError, d as deserializeActionResult, s as serializeActionResult, a as ACTION_RPC_ROUTE_PATTERN, b as ACTION_QUERY_PARAMS, g as getActionQueryString, D as DEFAULT_404_ROUTE, c as default404Instance, N as NOOP_MIDDLEWARE_FN, e as ensure404Route } from './astro-designed-error-pages_ze08hBTs.mjs';
 import 'es-module-lexer';
 import buffer from 'node:buffer';
 import crypto$1 from 'node:crypto';
 import { Http2ServerResponse } from 'node:http2';
-import { c as appendForwardSlash, j as joinPaths, f as fileExtension, s as slash, p as prependForwardSlash, r as removeTrailingForwardSlash, d as trimSlashes, m as matchPattern, e as isInternalPath, g as collapseDuplicateTrailingSlashes, h as hasFileExtension } from './index_ChlblgGj.mjs';
+import { c as appendForwardSlash, j as joinPaths, f as fileExtension, s as slash, p as prependForwardSlash, r as removeTrailingForwardSlash, d as trimSlashes, m as matchPattern, e as isInternalPath, g as collapseDuplicateTrailingSlashes, h as hasFileExtension } from './index_ty8FbXfT.mjs';
+import { serialize, parse } from 'cookie';
 import { unflatten as unflatten$1, stringify as stringify$1 } from 'devalue';
 import { createStorage, builtinDrivers } from 'unstorage';
 import '@vercel/routing-utils';
@@ -99,7 +99,7 @@ async function getRequestData(request) {
       }
       const encryptedSlots = params.get("s");
       return {
-        componentExport: params.get("e"),
+        encryptedComponentExport: params.get("e"),
         encryptedProps: params.get("p"),
         encryptedSlots
       };
@@ -110,6 +110,11 @@ async function getRequestData(request) {
         const data = JSON.parse(raw);
         if ("slots" in data && typeof data.slots === "object") {
           return badRequest("Plaintext slots are not allowed. Slots must be encrypted.");
+        }
+        if ("componentExport" in data && typeof data.componentExport === "string") {
+          return badRequest(
+            "Plaintext componentExport is not allowed. componentExport must be encrypted."
+          );
         }
         return data;
       } catch (e) {
@@ -146,6 +151,12 @@ function createEndpoint(manifest) {
       });
     }
     const key = await manifest.key;
+    let componentExport;
+    try {
+      componentExport = await decryptString(key, data.encryptedComponentExport);
+    } catch (_e) {
+      return badRequest("Encrypted componentExport value is invalid.");
+    }
     const encryptedProps = data.encryptedProps;
     let props = {};
     if (encryptedProps !== "") {
@@ -167,7 +178,7 @@ function createEndpoint(manifest) {
       }
     }
     const componentModule = await imp();
-    let Component = componentModule[data.componentExport];
+    let Component = componentModule[componentExport];
     const slots = {};
     for (const prop in decryptedSlots) {
       slots[prop] = createSlotValueFromString(decryptedSlots[prop]);
@@ -1157,6 +1168,38 @@ function computeCurrentLocale(pathname, locales, defaultLocale) {
       }
     }
   }
+}
+
+function deduplicateDirectiveValues(existingDirective, newDirective) {
+  const [directiveName, ...existingValues] = existingDirective.split(/\s+/).filter(Boolean);
+  const [newDirectiveName, ...newValues] = newDirective.split(/\s+/).filter(Boolean);
+  if (directiveName !== newDirectiveName) {
+    return void 0;
+  }
+  const finalDirectives = Array.from(/* @__PURE__ */ new Set([...existingValues, ...newValues]));
+  return `${directiveName} ${finalDirectives.join(" ")}`;
+}
+function pushDirective(directives, newDirective) {
+  let deduplicated = false;
+  if (directives.length === 0) {
+    return [newDirective];
+  }
+  const finalDirectives = [];
+  for (const directive of directives) {
+    if (deduplicated) {
+      finalDirectives.push(directive);
+      continue;
+    }
+    const result = deduplicateDirectiveValues(directive, newDirective);
+    if (result) {
+      finalDirectives.push(result);
+      deduplicated = true;
+    } else {
+      finalDirectives.push(directive);
+      finalDirectives.push(newDirective);
+    }
+  }
+  return finalDirectives;
 }
 
 async function callMiddleware(onRequest, apiContext, responseFunction) {
@@ -2362,6 +2405,21 @@ function resolveSessionDriverName(driver) {
   return driver;
 }
 
+function validateAndDecodePathname(pathname) {
+  let decoded;
+  try {
+    decoded = decodeURI(pathname);
+  } catch (_e) {
+    throw new Error("Invalid URL encoding");
+  }
+  const hasDecoding = decoded !== pathname;
+  const decodedStillHasEncoding = /%[0-9a-fA-F]{2}/.test(decoded);
+  if (hasDecoding && decodedStillHasEncoding) {
+    throw new Error("Multi-level URL encoding is not allowed");
+  }
+  return decoded;
+}
+
 const apiContextRoutesSymbol = Symbol.for("context.routes");
 class RenderContext {
   constructor(pipeline, locals, middleware, actions, pathname, request, routeData, status, clientAddress, cookies = new AstroCookies(request), params = getParams(routeData, pathname), url = RenderContext.#createNormalizedUrl(request.url), props = {}, partial = void 0, shouldInjectCspMetaTags = !!pipeline.manifest.csp, session = pipeline.manifest.sessionConfig ? new AstroSession(cookies, pipeline.manifest.sessionConfig, pipeline.runtimeMode) : void 0) {
@@ -2385,10 +2443,14 @@ class RenderContext {
   static #createNormalizedUrl(requestUrl) {
     const url = new URL(requestUrl);
     try {
-      url.pathname = decodeURI(url.pathname);
-    } finally {
-      return url;
+      url.pathname = validateAndDecodePathname(url.pathname);
+    } catch {
+      try {
+        url.pathname = decodeURI(url.pathname);
+      } catch {
+      }
     }
+    return url;
   }
   /**
    * A flag that tells the render content if the rewriting was triggered
@@ -2699,7 +2761,14 @@ class RenderContext {
             if (!pipeline.manifest.csp) {
               throw new AstroError(CspNotEnabled);
             }
-            renderContext.result?.directives.push(payload);
+            if (renderContext?.result?.directives) {
+              renderContext.result.directives = pushDirective(
+                renderContext.result.directives,
+                payload
+              );
+            } else {
+              renderContext?.result?.directives.push(payload);
+            }
           },
           insertScriptResource(resource) {
             if (!pipeline.manifest.csp) {
@@ -2928,7 +2997,14 @@ class RenderContext {
             if (!pipeline.manifest.csp) {
               throw new AstroError(CspNotEnabled);
             }
-            renderContext.result?.directives.push(payload);
+            if (renderContext?.result?.directives) {
+              renderContext.result.directives = pushDirective(
+                renderContext.result.directives,
+                payload
+              );
+            } else {
+              renderContext?.result?.directives.push(payload);
+            }
           },
           insertScriptResource(resource) {
             if (!pipeline.manifest.csp) {
@@ -3323,7 +3399,7 @@ class App {
     const url = new URL(request.url);
     const pathname = prependForwardSlash(this.removeBase(url.pathname));
     try {
-      return decodeURI(pathname);
+      return validateAndDecodePathname(pathname);
     } catch (e) {
       this.getAdapterLogger().error(e.toString());
       return pathname;
@@ -3344,7 +3420,12 @@ class App {
     if (!pathname) {
       pathname = prependForwardSlash(this.removeBase(url.pathname));
     }
-    let routeData = matchRoute(decodeURI(pathname), this.#manifestData);
+    try {
+      pathname = validateAndDecodePathname(pathname);
+    } catch {
+      return void 0;
+    }
+    let routeData = matchRoute(pathname, this.#manifestData);
     if (!routeData) return void 0;
     if (allowPrerenderedRoutes) {
       return routeData;
@@ -3493,6 +3574,12 @@ class App {
     let session;
     try {
       const mod = await this.#pipeline.getModuleForRoute(routeData);
+      if (!mod || typeof mod.page !== "function") {
+        throw new AstroError({
+          ...FailedToFindPageMapSSR,
+          message: `The module for route "${routeData.route}" does not have a valid page function. This may occur when using static output mode with an SSR adapter.`
+        });
+      }
       const renderContext = await RenderContext.create({
         pipeline: this.#pipeline,
         locals,
@@ -3505,6 +3592,7 @@ class App {
       session = renderContext.session;
       response = await renderContext.render(await mod.page());
     } catch (err) {
+      this.#logger.error("router", "Error while trying to render the route " + routeData.route);
       this.#logger.error(null, err.stack || err.message || String(err));
       return this.#renderError(request, {
         locals,
@@ -3516,7 +3604,9 @@ class App {
     } finally {
       await session?.[PERSIST_SYMBOL]();
     }
-    if (REROUTABLE_STATUS_CODES.includes(response.status) && response.headers.get(REROUTE_DIRECTIVE_HEADER) !== "no") {
+    if (REROUTABLE_STATUS_CODES.includes(response.status) && // If the body isn't null, that means the user sets the 404 status
+    // but uses the current route to handle the 404
+    response.body === null && response.headers.get(REROUTE_DIRECTIVE_HEADER) !== "no") {
       return this.#renderError(request, {
         locals,
         response,
@@ -3584,6 +3674,11 @@ class App {
         }
       }
       const mod = await this.#pipeline.getModuleForRoute(errorRouteData);
+      if (!mod || typeof mod.page !== "function") {
+        const response2 = this.#mergeResponses(new Response(null, { status }), originalResponse);
+        Reflect.set(response2, responseSentSymbol$1, true);
+        return response2;
+      }
       let session;
       try {
         const renderContext = await RenderContext.create({
@@ -3692,6 +3787,82 @@ const createOutgoingHttpHeaders = (headers) => {
   return nodeHeaders;
 };
 
+function sanitizeHost(hostname) {
+  if (!hostname) return void 0;
+  if (/[/\\]/.test(hostname)) return void 0;
+  return hostname;
+}
+function parseHost(host) {
+  const parts = host.split(":");
+  return {
+    hostname: parts[0],
+    port: parts[1]
+  };
+}
+function matchesAllowedDomains(hostname, protocol, port, allowedDomains) {
+  const hostWithPort = port ? `${hostname}:${port}` : hostname;
+  const urlString = `${protocol}://${hostWithPort}`;
+  if (!URL.canParse(urlString)) {
+    return false;
+  }
+  const testUrl = new URL(urlString);
+  return allowedDomains.some((pattern) => matchPattern(testUrl, pattern));
+}
+function validateHost(host, protocol, allowedDomains) {
+  if (!host || host.length === 0) return void 0;
+  if (!allowedDomains || allowedDomains.length === 0) return void 0;
+  const sanitized = sanitizeHost(host);
+  if (!sanitized) return void 0;
+  const { hostname, port } = parseHost(sanitized);
+  if (matchesAllowedDomains(hostname, protocol, port, allowedDomains)) {
+    return sanitized;
+  }
+  return void 0;
+}
+function validateForwardedHeaders(forwardedProtocol, forwardedHost, forwardedPort, allowedDomains) {
+  const result = {};
+  if (forwardedProtocol) {
+    if (allowedDomains && allowedDomains.length > 0) {
+      const hasProtocolPatterns = allowedDomains.some((pattern) => pattern.protocol !== void 0);
+      if (hasProtocolPatterns) {
+        try {
+          const testUrl = new URL(`${forwardedProtocol}://example.com`);
+          const isAllowed = allowedDomains.some((pattern) => matchPattern(testUrl, pattern));
+          if (isAllowed) {
+            result.protocol = forwardedProtocol;
+          }
+        } catch {
+        }
+      } else if (/^https?$/.test(forwardedProtocol)) {
+        result.protocol = forwardedProtocol;
+      }
+    } else if (/^https?$/.test(forwardedProtocol)) {
+      result.protocol = forwardedProtocol;
+    }
+  }
+  if (forwardedPort && allowedDomains && allowedDomains.length > 0) {
+    const hasPortPatterns = allowedDomains.some((pattern) => pattern.port !== void 0);
+    if (hasPortPatterns) {
+      const isAllowed = allowedDomains.some((pattern) => pattern.port === forwardedPort);
+      if (isAllowed) {
+        result.port = forwardedPort;
+      }
+    }
+  }
+  if (forwardedHost && forwardedHost.length > 0 && allowedDomains && allowedDomains.length > 0) {
+    const protoForValidation = result.protocol || "https";
+    const sanitized = sanitizeHost(forwardedHost);
+    if (sanitized) {
+      const { hostname, port: portFromHost } = parseHost(sanitized);
+      const portForValidation = result.port || portFromHost;
+      if (matchesAllowedDomains(hostname, protoForValidation, portForValidation, allowedDomains)) {
+        result.host = sanitized;
+      }
+    }
+  }
+  return result;
+}
+
 function apply() {
   if (!globalThis.crypto) {
     Object.defineProperty(globalThis, "crypto", {
@@ -3750,26 +3921,28 @@ class NodeApp extends App {
       return multiValueHeader?.toString()?.split(",").map((e) => e.trim())?.[0];
     };
     const providedProtocol = isEncrypted ? "https" : "http";
-    const providedHostname = req.headers.host ?? req.headers[":authority"];
-    const validated = App.validateForwardedHeaders(
+    const untrustedHostname = req.headers.host ?? req.headers[":authority"];
+    const validated = validateForwardedHeaders(
       getFirstForwardedValue(req.headers["x-forwarded-proto"]),
       getFirstForwardedValue(req.headers["x-forwarded-host"]),
       getFirstForwardedValue(req.headers["x-forwarded-port"]),
       allowedDomains
     );
     const protocol = validated.protocol ?? providedProtocol;
-    const sanitizedProvidedHostname = App.sanitizeHost(
-      typeof providedHostname === "string" ? providedHostname : void 0
+    const validatedHostname = validateHost(
+      typeof untrustedHostname === "string" ? untrustedHostname : void 0,
+      protocol,
+      allowedDomains
     );
-    const hostname = validated.host ?? sanitizedProvidedHostname;
+    const hostname = validated.host ?? validatedHostname ?? "localhost";
     const port = validated.port;
     let url;
     try {
       const hostnamePort = getHostnamePort(hostname, port);
       url = new URL(`${protocol}://${hostnamePort}${req.url}`);
     } catch {
-      const hostnamePort = getHostnamePort(providedHostname, port);
-      url = new URL(`${providedProtocol}://${hostnamePort}`);
+      const hostnamePort = getHostnamePort(hostname, port);
+      url = new URL(`${protocol}://${hostnamePort}`);
     }
     const options = {
       method: req.method || "GET",

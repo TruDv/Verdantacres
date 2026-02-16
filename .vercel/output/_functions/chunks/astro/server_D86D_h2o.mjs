@@ -5,7 +5,7 @@ import { decodeBase64, encodeBase64, encodeHexUpperCase, decodeHex } from '@oslo
 import { z } from 'zod';
 import 'cssesc';
 
-const ASTRO_VERSION = "5.16.0";
+const ASTRO_VERSION = "5.17.2";
 const REROUTE_DIRECTIVE_HEADER = "X-Astro-Reroute";
 const REWRITE_DIRECTIVE_HEADER_KEY = "X-Astro-Rewrite";
 const REWRITE_DIRECTIVE_HEADER_VALUE = "yes";
@@ -261,6 +261,11 @@ const MissingSharp = {
   message: "Could not find Sharp. Please install Sharp (`sharp`) manually into your project or migrate to another image service.",
   hint: "See Sharp's installation instructions for more information: https://sharp.pixelplumbing.com/install. If you are not relying on `astro:assets` to optimize, transform, or process any images, you can configure a passthrough image service instead of installing Sharp. See https://docs.astro.build/en/reference/errors/missing-sharp for more information.\n\nSee https://docs.astro.build/en/guides/images/#default-image-service for more information on how to migrate to another image service."
 };
+const FailedToFindPageMapSSR = {
+  name: "FailedToFindPageMapSSR",
+  title: "Astro couldn't find the correct page to render",
+  message: "Astro couldn't find the correct page to render, probably because it wasn't correctly mapped for SSR usage. This is an internal error. Please file an issue."
+};
 const i18nNoLocaleFoundInPath = {
   name: "i18nNoLocaleFoundInPath",
   title: "The path doesn't contain any locale",
@@ -291,7 +296,7 @@ const FontFamilyNotFound = {
   name: "FontFamilyNotFound",
   title: "Font family not found",
   message: (family) => `No data was found for the \`"${family}"\` family passed to the \`<Font>\` component.`,
-  hint: "This is often caused by a typo. Check that the `<Font />` component or `getFontData()` function are using a `cssVariable` specified in your config."
+  hint: "This is often caused by a typo. Check that the `<Font />` component is using a `cssVariable` specified in your config."
 };
 const CspNotEnabled = {
   name: "CspNotEnabled",
@@ -389,7 +394,7 @@ class AstroError extends Error {
     this.frame = codeFrame(source, location);
   }
   static is(err) {
-    return err.type === "AstroError";
+    return err?.type === "AstroError";
   }
 }
 
@@ -1364,6 +1369,13 @@ class SlotString extends HTMLString {
 function isSlotString(str) {
   return !!str[slotString];
 }
+function mergeSlotInstructions(target, source) {
+  if (source.instructions?.length) {
+    target ??= [];
+    target.push(...source.instructions);
+  }
+  return target;
+}
 function renderSlot(result, slotted, fallback) {
   return {
     async render(destination) {
@@ -1378,10 +1390,7 @@ async function renderSlotToString(result, slotted, fallback) {
     write(chunk) {
       if (chunk instanceof SlotString) {
         content += chunk;
-        if (chunk.instructions) {
-          instructions ??= [];
-          instructions.push(...chunk.instructions);
-        }
+        instructions = mergeSlotInstructions(instructions, chunk);
       } else if (chunk instanceof Response) return;
       else if (typeof chunk === "object" && "type" in chunk && typeof chunk.type === "string") {
         if (instructions === null) {
@@ -1439,9 +1448,9 @@ const COMMENT_REPLACER = "\\u003C!--";
 function safeJsonStringify(obj) {
   return JSON.stringify(obj).replace(SCRIPT_RE, SCRIPT_REPLACER).replace(COMMENT_RE, COMMENT_REPLACER);
 }
-function createSearchParams(componentExport, encryptedProps, slots) {
+function createSearchParams(encryptedComponentExport, encryptedProps, slots) {
   const params = new URLSearchParams();
-  params.set("e", componentExport);
+  params.set("e", encryptedComponentExport);
   params.set("p", encryptedProps);
   params.set("s", slots);
   return params;
@@ -1543,13 +1552,14 @@ class ServerIslandComponent {
       }
     }
     const key = await this.result.key;
+    const componentExportEncrypted = await encryptString(key, componentExport);
     const propsEncrypted = Object.keys(this.props).length === 0 ? "" : await encryptString(key, JSON.stringify(this.props));
     const slotsEncrypted = Object.keys(renderedSlots).length === 0 ? "" : await encryptString(key, JSON.stringify(renderedSlots));
     const hostId = await this.getHostId();
     const slash = this.result.base.endsWith("/") ? "" : "/";
     let serverIslandUrl = `${this.result.base}${slash}_server-islands/${componentId}${this.result.trailingSlash === "always" ? "/" : ""}`;
     const potentialSearchParams = createSearchParams(
-      componentExport,
+      componentExportEncrypted,
       propsEncrypted,
       slotsEncrypted
     );
@@ -1571,7 +1581,7 @@ let response = await fetch('${serverIslandUrl}', { headers });`
     ) : (
       // POST request
       `let data = {
-	componentExport: ${safeJsonStringify(componentExport)},
+	encryptedComponentExport: ${safeJsonStringify(componentExportEncrypted)},
 	encryptedProps: ${safeJsonStringify(propsEncrypted)},
 	encryptedSlots: ${safeJsonStringify(slotsEncrypted)},
 };
@@ -1657,6 +1667,14 @@ function stringifyChunk(result, chunk) {
         result._metadata.hasRenderedServerIslandRuntime = true;
         return renderServerIslandRuntime();
       }
+      case "script": {
+        const { id, content } = instruction;
+        if (result._metadata.renderedScripts.has(id)) {
+          return "";
+        }
+        result._metadata.renderedScripts.add(id);
+        return content;
+      }
       default: {
         throw new Error(`Unknown chunk type: ${chunk.type}`);
       }
@@ -1689,6 +1707,13 @@ function chunkToByteArray(result, chunk) {
   } else {
     const stringified = stringifyChunk(result, chunk);
     return encoder.encode(stringified.toString());
+  }
+}
+function chunkToByteArrayOrString(result, chunk) {
+  if (ArrayBuffer.isView(chunk)) {
+    return chunk;
+  } else {
+    return stringifyChunk(result, chunk).toString();
   }
 }
 function isRenderInstance(obj) {
@@ -2019,13 +2044,31 @@ async function renderToAsyncIterable(result, componentFactory, props, children, 
         throw error;
       }
       let length = 0;
+      let stringToEncode = "";
       for (let i = 0, len = buffer.length; i < len; i++) {
-        length += buffer[i].length;
+        const bufferEntry = buffer[i];
+        if (typeof bufferEntry === "string") {
+          const nextIsString = i + 1 < len && typeof buffer[i + 1] === "string";
+          stringToEncode += bufferEntry;
+          if (!nextIsString) {
+            const encoded = encoder.encode(stringToEncode);
+            length += encoded.length;
+            stringToEncode = "";
+            buffer[i] = encoded;
+          } else {
+            buffer[i] = "";
+          }
+        } else {
+          length += bufferEntry.length;
+        }
       }
       let mergedArray = new Uint8Array(length);
       let offset = 0;
       for (let i = 0, len = buffer.length; i < len; i++) {
         const item = buffer[i];
+        if (item === "") {
+          continue;
+        }
         mergedArray.set(item, offset);
         offset += item.length;
       }
@@ -2055,7 +2098,7 @@ async function renderToAsyncIterable(result, componentFactory, props, children, 
       if (chunk instanceof Response) {
         throw new AstroError(ResponseSentError);
       }
-      const bytes = chunkToByteArray(result, chunk);
+      const bytes = chunkToByteArrayOrString(result, chunk);
       if (bytes.length > 0) {
         buffer.push(bytes);
         next?.resolve();
@@ -2536,10 +2579,23 @@ async function renderJSX(result, vnode) {
       return vnode;
     case (!vnode && vnode !== 0):
       return "";
-    case Array.isArray(vnode):
-      return markHTMLString(
-        (await Promise.all(vnode.map((v) => renderJSX(result, v)))).join("")
-      );
+    case Array.isArray(vnode): {
+      const renderedItems = await Promise.all(vnode.map((v) => renderJSX(result, v)));
+      let instructions = null;
+      let content = "";
+      for (const item of renderedItems) {
+        if (item instanceof SlotString) {
+          content += item;
+          instructions = mergeSlotInstructions(instructions, item);
+        } else {
+          content += item;
+        }
+      }
+      if (instructions) {
+        return markHTMLString(new SlotString(content, instructions));
+      }
+      return markHTMLString(content);
+    }
   }
   return renderJSXVNode(result, vnode);
 }
@@ -2745,20 +2801,17 @@ async function renderPage(result, componentFactory, props, children, streaming, 
 }
 
 async function renderScript(result, id) {
-  if (result._metadata.renderedScripts.has(id)) return;
-  result._metadata.renderedScripts.add(id);
   const inlined = result.inlinedScripts.get(id);
+  let content = "";
   if (inlined != null) {
     if (inlined) {
-      return markHTMLString(`<script type="module">${inlined}</script>`);
-    } else {
-      return "";
+      content = `<script type="module">${inlined}</script>`;
     }
+  } else {
+    const resolved = await result.resolve(id);
+    content = `<script type="module" src="${result.userAssetsBase ? (result.base === "/" ? "" : result.base) + result.userAssetsBase : ""}${resolved}"></script>`;
   }
-  const resolved = await result.resolve(id);
-  return markHTMLString(
-    `<script type="module" src="${result.userAssetsBase ? (result.base === "/" ? "" : result.base) + result.userAssetsBase : ""}${resolved}"></script>`
-  );
+  return createRenderInstruction({ type: "script", id, content });
 }
 
 "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_".split("").reduce((v, c) => (v[c.charCodeAt(0)] = c, v), []);
@@ -2781,4 +2834,4 @@ function spreadAttributes(values = {}, _name, { class: scopedClassName } = {}) {
   return markHTMLString(output);
 }
 
-export { chunkToString as $, AstroError as A, ResponseSentError as B, ActionNotFoundError as C, MiddlewareNoDataOrNextCalled as D, ExpectedImage as E, FailedToFetchRemoteImageDimensions as F, MiddlewareNotAResponse as G, originPathnameSymbol as H, IncompatibleDescriptorOptions as I, RewriteWithBodyUsed as J, GetStaticPathsRequired as K, LocalImageUsedWrongly as L, MissingImageDimension as M, NoImageMetadata as N, InvalidGetStaticPathsReturn as O, InvalidGetStaticPathsEntry as P, GetStaticPathsExpectedParams as Q, ROUTE_TYPE_HEADER as R, GetStaticPathsInvalidRouteParam as S, PageNumberParamNotFound as T, UnsupportedImageFormat as U, DEFAULT_404_COMPONENT as V, NoMatchingStaticPathFound as W, PrerenderDynamicEndpointPathCollide as X, ReservedSlotName as Y, renderSlotToString as Z, renderJSX as _, UnsupportedImageConversion as a, isRenderInstruction as a0, ForbiddenRewrite as a1, SessionStorageInitError as a2, SessionStorageSaveError as a3, ASTRO_VERSION as a4, CspNotEnabled as a5, LocalsReassigned as a6, generateCspDigest as a7, PrerenderClientAddressNotAvailable as a8, clientAddressSymbol as a9, ClientAddressNotAvailable as aa, StaticClientAddressNotAvailable as ab, AstroResponseHeadersReassigned as ac, responseSentSymbol as ad, renderPage as ae, REWRITE_DIRECTIVE_HEADER_KEY as af, REWRITE_DIRECTIVE_HEADER_VALUE as ag, renderEndpoint as ah, LocalsNotAnObject as ai, REROUTABLE_STATUS_CODES as aj, nodeRequestAbortControllerCleanupSymbol as ak, NOOP_MIDDLEWARE_HEADER as al, REDIRECT_STATUS_CODES as am, ActionsReturnedInvalidDataError as an, MissingSharp as ao, ExpectedImageOptions as b, ExpectedNotESMImage as c, InvalidImageService as d, createComponent as e, createAstro as f, ImageMissingAlt as g, addAttribute as h, ExperimentalFontsNotEnabled as i, FontFamilyNotFound as j, renderComponent as k, renderScript as l, maybeRenderHead as m, defineScriptVars as n, renderHead as o, renderSlot as p, decodeKey as q, renderTemplate as r, spreadAttributes as s, toStyleString as t, unescapeHTML as u, decryptString as v, createSlotValueFromString as w, isAstroComponentFactory as x, REROUTE_DIRECTIVE_HEADER as y, i18nNoLocaleFoundInPath as z };
+export { chunkToString as $, AstroError as A, ResponseSentError as B, ActionNotFoundError as C, MiddlewareNoDataOrNextCalled as D, ExpectedImage as E, FailedToFetchRemoteImageDimensions as F, MiddlewareNotAResponse as G, originPathnameSymbol as H, IncompatibleDescriptorOptions as I, RewriteWithBodyUsed as J, GetStaticPathsRequired as K, LocalImageUsedWrongly as L, MissingImageDimension as M, NoImageMetadata as N, InvalidGetStaticPathsReturn as O, InvalidGetStaticPathsEntry as P, GetStaticPathsExpectedParams as Q, ROUTE_TYPE_HEADER as R, GetStaticPathsInvalidRouteParam as S, PageNumberParamNotFound as T, UnsupportedImageFormat as U, DEFAULT_404_COMPONENT as V, NoMatchingStaticPathFound as W, PrerenderDynamicEndpointPathCollide as X, ReservedSlotName as Y, renderSlotToString as Z, renderJSX as _, UnsupportedImageConversion as a, isRenderInstruction as a0, ForbiddenRewrite as a1, SessionStorageInitError as a2, SessionStorageSaveError as a3, ASTRO_VERSION as a4, CspNotEnabled as a5, LocalsReassigned as a6, generateCspDigest as a7, PrerenderClientAddressNotAvailable as a8, clientAddressSymbol as a9, ClientAddressNotAvailable as aa, StaticClientAddressNotAvailable as ab, AstroResponseHeadersReassigned as ac, responseSentSymbol as ad, renderPage as ae, REWRITE_DIRECTIVE_HEADER_KEY as af, REWRITE_DIRECTIVE_HEADER_VALUE as ag, renderEndpoint as ah, LocalsNotAnObject as ai, FailedToFindPageMapSSR as aj, REROUTABLE_STATUS_CODES as ak, nodeRequestAbortControllerCleanupSymbol as al, NOOP_MIDDLEWARE_HEADER as am, REDIRECT_STATUS_CODES as an, ActionsReturnedInvalidDataError as ao, MissingSharp as ap, ExpectedImageOptions as b, ExpectedNotESMImage as c, InvalidImageService as d, createComponent as e, ImageMissingAlt as f, addAttribute as g, createAstro as h, ExperimentalFontsNotEnabled as i, FontFamilyNotFound as j, renderComponent as k, renderScript as l, maybeRenderHead as m, defineScriptVars as n, renderHead as o, renderSlot as p, decodeKey as q, renderTemplate as r, spreadAttributes as s, toStyleString as t, unescapeHTML as u, decryptString as v, createSlotValueFromString as w, isAstroComponentFactory as x, REROUTE_DIRECTIVE_HEADER as y, i18nNoLocaleFoundInPath as z };

@@ -4,6 +4,10 @@ import vercel from '@astrojs/vercel';
 
 export default defineConfig({
   output: 'server',
-  adapter: vercel(), // Standard Vercel adapter for Astro 5
+  adapter: vercel({
+    webAnalytics: { enabled: true },
+    imagesConfig: { sizes: [320, 640, 1280] },
+    imageService: true,
+  }),
   integrations: [tailwind()],
 });

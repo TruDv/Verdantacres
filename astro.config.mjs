@@ -4,10 +4,10 @@ import vercel from '@astrojs/vercel';
 
 export default defineConfig({
   output: 'server',
-  adapter: vercel({
-    webAnalytics: { enabled: true },
-    imagesConfig: { sizes: [320, 640, 1280] },
-    imageService: true,
-  }),
+  adapter: vercel(),
   integrations: [tailwind()],
+  // ADD THIS BLOCK:
+  security: {
+    checkOrigin: false,
+  }
 });

@@ -2,6 +2,12 @@ import type { APIRoute } from 'astro';
 import { env } from '../../lib/env';
 
 export const POST: APIRoute = async ({ request }) => {
+    // Helper to ensure we always return JSON headers
+    const jsonResponse = (data: any, status: number) => new Response(JSON.stringify(data), {
+        status,
+        headers: { 'Content-Type': 'application/json' }
+    });
+
     try {
         console.log('📧 API: Processing request');
         
@@ -12,13 +18,15 @@ export const POST: APIRoute = async ({ request }) => {
         const message = data.get('message')?.toString();
 
         if (!name || !email || !subject || !message) {
-            return new Response(JSON.stringify({ success: false, error: 'Missing required fields' }), { status: 400 });
+            return jsonResponse({ success: false, error: 'Missing required fields' }, 400);
         }
 
         const API_KEY = env.RESEND_API_KEY;
-        
-        // This should now log TRUE because of the hardcoded fix
         console.log('🔑 Key Check:', !!API_KEY);
+
+        if (!API_KEY) {
+            return jsonResponse({ success: false, error: 'API Key not configured on server' }, 500);
+        }
 
         const emailResponse = await fetch('https://api.resend.com/emails', {
             method: 'POST',
@@ -27,29 +35,32 @@ export const POST: APIRoute = async ({ request }) => {
                 'Authorization': `Bearer ${API_KEY}`
             },
             body: JSON.stringify({
-                from: 'Verdant Acres <verdantacreslimited.com>',
-                to: ['testemail@verdantacreslimited.com'], 
+                // FIXED: Added 'info@' to make this a valid email address
+                from: 'Verdant Acres <info@verdantacreslimited.com>', 
+                to: ['info@verdantacreslimited.com'], 
                 reply_to: email,
                 subject: `New Contact: ${subject} from ${name}`,
-                html: `<p><strong>Name:</strong> ${name}</p>
-                       <p><strong>Email:</strong> ${email}</p>
-                       <p><strong>Message:</strong> ${message}</p>`,
+                html: `
+                    <h3>New Message from The Forge</h3>
+                    <p><strong>From:</strong> ${name} (${email})</p>
+                    <p><strong>Subject:</strong> ${subject}</p>
+                    <p><strong>Message:</strong></p>
+                    <p>${message}</p>
+                `,
             })
         });
 
         const result = await emailResponse.json();
 
         if (emailResponse.ok) {
-            console.log('🚀 Email sent successfully!');
-            return new Response(JSON.stringify({ success: true }), { status: 200 });
+            return jsonResponse({ success: true }, 200);
         } else {
-            // This is critical for debugging Resend's strict onboarding rules
-            console.error('❌ Resend Error Details:', JSON.stringify(result));
-            return new Response(JSON.stringify({ success: false, error: result.message || 'Resend API Error' }), { status: 500 });
+            console.error('❌ Resend Error:', result);
+            return jsonResponse({ success: false, error: result.message || 'Resend failed' }, 500);
         }
 
     } catch (error) {
-        console.error('❌ Server Error:', error);
-        return new Response(JSON.stringify({ success: false, error: 'Internal Server Error' }), { status: 500 });
+        console.error('❌ Server Crash:', error);
+        return jsonResponse({ success: false, error: 'Internal Server Error' }, 500);
     }
 };

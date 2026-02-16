@@ -36,12 +36,12 @@ export const POST: APIRoute = async ({ request }) => {
             },
             body: JSON.stringify({
                 // FIXED: Added 'info@' to make this a valid email address
-                from: 'Verdant Acres <info@verdantacreslimited.com>', 
-                to: ['info@verdantacreslimited.com'], 
+                from: 'Verdant Acres <testemail@verdantacreslimited.com>', 
+                to: ['testemail@verdantacreslimited.com'], 
                 reply_to: email,
                 subject: `New Contact: ${subject} from ${name}`,
                 html: `
-                    <h3>New Message from The Forge</h3>
+                    <h3>New Message from Verdantcres Limited</h3>
                     <p><strong>From:</strong> ${name} (${email})</p>
                     <p><strong>Subject:</strong> ${subject}</p>
                     <p><strong>Message:</strong></p>

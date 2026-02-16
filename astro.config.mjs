@@ -4,8 +4,6 @@ import vercel from '@astrojs/vercel';
 
 export default defineConfig({
   output: 'server',
-  adapter: vercel({
-    functionPerRoute: true
-  }),
+  adapter: vercel(), // Standard Vercel adapter for Astro 5
   integrations: [tailwind()],
 });

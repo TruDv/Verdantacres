@@ -10,88 +10,84 @@ import Footer from '../components/Footer.astro';
   <Header />
 
   <!-- Modal Popup - Add this right after <Header /> -->
-<div id="scam-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" style="display: none;">
-  <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl animate-fadeInUp">
-    <div class="bg-red-600 rounded-t-2xl px-5 py-3 flex items-center justify-between">
-      <div class="flex items-center space-x-2">
-        <i class="fas fa-exclamation-triangle text-white text-xl"></i>
-        <h3 class="text-white font-bold text-lg">Recruitment Scam Alert</h3>
-      </div>
-      <button onclick="closeModal()" class="text-white hover:text-gray-200">
-        <i class="fas fa-times text-xl"></i>
-      </button>
-    </div>
-    
-    <div class="p-5">
-      <!-- IMPORTANT NOTICE -->
-      <div class="mb-4">
-        <p class="font-bold text-red-600 text-sm uppercase tracking-wide mb-2">IMPORTANT NOTICE:</p>
-        <p class="text-gray-800 text-sm leading-relaxed">
-          Verdant Acres Limited only accepts job applications via 
-          <a href="mailto:hr@verdantacreslimited.com" class="text-blue-600 font-mono text-sm font-bold underline hover:text-blue-800">hr@verdantacreslimited.com</a> 
-          or through its official website.
-        </p>
+  <div id="scam-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" style="display: none;">
+    <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl animate-fadeInUp">
+      <div class="bg-red-600 rounded-t-2xl px-5 py-3 flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <i class="fas fa-exclamation-triangle text-white text-xl"></i>
+          <h3 class="text-white font-bold text-lg">Recruitment Scam Alert</h3>
+        </div>
+        <button onclick="closeModal()" class="text-white hover:text-gray-200">
+          <i class="fas fa-times text-xl"></i>
+        </button>
       </div>
       
-      <!-- Second paragraph -->
-      <p class="text-gray-800 text-sm leading-relaxed mb-4">
-        The Company does <span class="font-bold underline">NOT</span> conduct recruitment through third parties or agents.
-      </p>
-      
-      <!-- Warning box -->
-      <div class="bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-5 rounded-r">
-        <div class="flex items-start">
-          <i class="fas fa-shield-alt text-yellow-600 text-sm mt-0.5 mr-2"></i>
-          <p class="text-xs text-yellow-800 leading-relaxed">
-            Please be cautious of fraudulent job offers. Always verify through official channels.
+      <div class="p-5">
+        <!-- IMPORTANT NOTICE -->
+        <div class="mb-4">
+          <p class="font-bold text-red-600 text-sm uppercase tracking-wide mb-2">IMPORTANT NOTICE:</p>
+          <p class="text-gray-800 text-sm leading-relaxed">
+            Verdant Acres Limited only accepts job applications via 
+            <a href="mailto:recruitment@verdantacreslimited.com" class="text-blue-600 font-mono text-sm font-bold underline hover:text-blue-800">recruitment@verdantacreslimited.com</a> 
+            or through its official website.
           </p>
         </div>
+        
+        <!-- Second paragraph -->
+        <p class="text-gray-800 text-sm leading-relaxed mb-4">
+          The Company does <span class="font-bold underline">NOT</span> conduct recruitment through third parties or agents.
+        </p>
+        
+        <!-- Warning box -->
+        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-5 rounded-r">
+          <div class="flex items-start">
+            <i class="fas fa-shield-alt text-yellow-600 text-sm mt-0.5 mr-2"></i>
+            <p class="text-xs text-yellow-800 leading-relaxed">
+              Please be cautious of fraudulent job offers. Always verify through official channels.
+            </p>
+          </div>
+        </div>
+        
+        <!-- Close button -->
+        <button onclick="closeModal()" class="w-full bg-gray-800 text-white font-semibold py-2.5 px-4 rounded-lg hover:bg-red-600 transition duration-300 text-sm">
+          I Understand, Close
+        </button>
       </div>
-      
-      <!-- Close button -->
-      <button onclick="closeModal()" class="w-full bg-gray-800 text-white font-semibold py-2.5 px-4 rounded-lg hover:bg-red-600 transition duration-300 text-sm">
-        I Understand, Close
-      </button>
     </div>
   </div>
-</div>
 
-<script is:global>
-  // Show modal after page loads
-  document.addEventListener('DOMContentLoaded', () => {
-    // Check if user has closed it before (stores in localStorage for 30 days)
-    const hasSeenAlert = localStorage.getItem('hasSeenScamAlert');
-    if (!hasSeenAlert) {
-      document.getElementById('scam-modal').style.display = 'flex';
+  <script is:global>
+    // Show modal after page loads - ONLY ONCE PER SESSION
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if user has closed it in this session (sessionStorage)
+      const hasSeenAlert = sessionStorage.getItem('hasSeenScamAlert');
+      if (!hasSeenAlert) {
+        document.getElementById('scam-modal').style.display = 'flex';
+      }
+    });
+    
+    function closeModal() {
+      document.getElementById('scam-modal').style.display = 'none';
+      // Store in sessionStorage - this clears when browser tab is closed
+      sessionStorage.setItem('hasSeenScamAlert', 'true');
     }
-  });
-  
-  function closeModal() {
-    document.getElementById('scam-modal').style.display = 'none';
-    // Remember that user has seen it (won't show again for 30 days)
-    localStorage.setItem('hasSeenScamAlert', 'true');
-    // Set expiry for 30 days
-    setTimeout(() => {
-      localStorage.removeItem('hasSeenScamAlert');
-    }, 30 * 24 * 60 * 60 * 1000);
-  }
-</script>
+  </script>
 
-<style is:global>
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
+  <style is:global>
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-    to {
-      opacity: 1;
-      transform: translateY(0);
+    .animate-fadeInUp {
+      animation: fadeInUp 0.3s ease-out;
     }
-  }
-  .animate-fadeInUp {
-    animation: fadeInUp 0.3s ease-out;
-  }
-</style>
+  </style>
 
   <section id="hero" class="pt-16 pb-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -306,7 +302,7 @@ import Footer from '../components/Footer.astro';
           <div class="relative z-10">
             <span class="inline-block py-1 px-3 rounded-full bg-primary/10 text-primary font-bold text-xs uppercase tracking-wider mb-6">Chairman's Foreword</span>
             <blockquote class="text-2xl md:text-3xl font-heading font-medium text-dark leading-snug mb-8">
-              "We are building one of West Africa’s most ambitious coconut expansion programmes—an 11,000-hectare integrated plantation advancing national self-sufficiency."
+              "We are building one of West Africa's most ambitious coconut expansion programmes—an 11,000-hectare integrated plantation advancing national self-sufficiency."
             </blockquote>
             <div class="border-t border-gray-100 pt-8 flex items-end justify-between">
               <div>
@@ -328,7 +324,7 @@ import Footer from '../components/Footer.astro';
         Ready to Partner on the Future of African Agribusiness?
       </h2>
       <p class="text-xl text-gray-600 mb-12 max-w-3xl mx-auto">
-        Join us in building West Africa’s largest integrated coconut platform — secure supply, sustainable impact, and strong returns.
+        Join us in building West Africa's largest integrated coconut platform — secure supply, sustainable impact, and strong returns.
       </p>
       <div class="flex flex-col sm:flex-row gap-6 justify-center">
         <a href="/contact" class="bg-corporate text-white font-bold text-lg py-5 px-12 rounded-full hover:bg-primary hover:text-gray-900 transition duration-300 shadow-xl">

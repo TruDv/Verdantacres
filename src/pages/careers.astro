@@ -1,0 +1,1041 @@
+---
+// src/pages/careers.astro
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Careers | Verdant Acres Limited — Join Our Team">
+
+    <!-- FONT AWESOME FOR ICONS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJzLwV8pA0/DkU8T9z+K+k7pQkU2qJ1iT9G8wA5p8p+R/9yC7b+7Gk5c8eA==" crossorigin="anonymous" referrerpolicy="no-referrer" slot="head-end" />
+
+    <style>
+        :root {
+            --color-primary: #DAA520;
+            --color-corporate: #1B5E20;
+            --color-surface: #FAFAFA;
+        }
+        .text-primary { color: var(--color-primary); }
+        .bg-primary { background-color: var(--color-primary); }
+        .border-primary { border-color: var(--color-primary); }
+        .text-corporate { color: var(--color-corporate); }
+        .bg-corporate { background-color: var(--color-corporate); }
+        .border-corporate { border-color: var(--color-corporate); }
+        .bg-surface { background-color: var(--color-surface); }
+        .font-heading { font-family: 'Satoshi', sans-serif; }
+        
+        .job-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .job-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+        }
+        .job-card.active {
+            border-color: var(--color-primary);
+            background-color: #fef9e7;
+        }
+        .job-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
+            opacity: 0;
+            padding: 0 1.5rem;
+        }
+        .job-details.open {
+            max-height: 2000px;
+            opacity: 1;
+            padding: 1.5rem;
+        }
+        .job-details-content {
+            border-top: 2px solid #e5e7eb;
+            padding-top: 1.5rem;
+        }
+        .badge {
+            background-color: var(--color-primary);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .badge-location {
+            background-color: #e5e7eb;
+            color: #374151;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+        }
+        .filter-btn {
+            transition: all 0.3s ease;
+            padding: 0.5rem 1.25rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            background-color: #f3f4f6;
+            color: #4b5563;
+            border: 2px solid transparent;
+        }
+        .filter-btn:hover {
+            background-color: #e5e7eb;
+        }
+        .filter-btn.active {
+            background-color: var(--color-corporate);
+            color: white;
+            border-color: var(--color-corporate);
+        }
+        .apply-btn {
+            background-color: var(--color-corporate);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        .apply-btn:hover {
+            background-color: var(--color-primary);
+            transform: scale(1.02);
+        }
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            font-family: 'Satoshi', sans-serif;
+            color: var(--color-corporate);
+        }
+        @media (max-width: 640px) {
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+
+    <Header slot="header" />
+
+    <!-- HERO SECTION -->
+    <section class="relative h-80 flex items-center bg-corporate">
+        <div class="absolute inset-0">
+            <img
+                src="/assets/hero-coconut-farm.jpg"
+                alt="Join the Verdant Acres team"
+                class="w-full h-full object-cover opacity-40"
+                onerror="this.src='https://placehold.co/1920x400/1B5E20/111827?text=Join+Our+Team'"
+            />
+            <div class="absolute inset-0 bg-corporate/60"></div>
+        </div>
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
+            <p class="text-sm uppercase tracking-widest font-bold text-primary mb-2">Career Opportunities</p>
+            <h1 class="text-4xl md:text-6xl font-black font-heading leading-tight">
+                Build Your Career With Us
+            </h1>
+            <p class="text-lg mt-4 max-w-2xl opacity-90">
+                Join West Africa's leading integrated coconut value chain company. 
+                We're looking for passionate individuals to grow with us.
+            </p>
+        </div>
+    </section>
+
+    <!-- WHY JOIN US SECTION -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-black font-heading text-corporate text-center mb-4">Why Join Verdant Acres?</h2>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+                Be part of a company that's transforming agriculture in West Africa with sustainable practices and innovative solutions.
+            </p>
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="text-center p-6 rounded-xl bg-surface">
+                    <i class="fas fa-seedling text-4xl text-primary mb-3"></i>
+                    <h4 class="font-bold text-corporate">Sustainable Impact</h4>
+                    <p class="text-sm text-gray-600">Work with a company committed to zero-waste and environmental stewardship</p>
+                </div>
+                <div class="text-center p-6 rounded-xl bg-surface">
+                    <i class="fas fa-chart-line text-4xl text-primary mb-3"></i>
+                    <h4 class="font-bold text-corporate">Career Growth</h4>
+                    <p class="text-sm text-gray-600">Opportunities for professional development and advancement</p>
+                </div>
+                <div class="text-center p-6 rounded-xl bg-surface">
+                    <i class="fas fa-handshake text-4xl text-primary mb-3"></i>
+                    <h4 class="font-bold text-corporate">Great Culture</h4>
+                    <p class="text-sm text-gray-600">Collaborative environment with a focus on teamwork and innovation</p>
+                </div>
+                <div class="text-center p-6 rounded-xl bg-surface">
+                    <i class="fas fa-gem text-4xl text-primary mb-3"></i>
+                    <h4 class="font-bold text-corporate">Competitive Benefits</h4>
+                    <p class="text-sm text-gray-600">Attractive compensation packages and accommodation where applicable</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JOB VACANCIES SECTION -->
+    <section class="py-16 bg-surface">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                <div>
+                    <h2 class="text-3xl font-black font-heading text-corporate">Open Positions</h2>
+                    <p class="text-gray-600 mt-1">Click on any position to view full details</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="uyo">Uyo</button>
+                    <button class="filter-btn" data-filter="lagos">Lagos</button>
+                </div>
+            </div>
+
+            <!-- Job Listings -->
+            <div class="space-y-4" id="job-listings">
+                
+                <!-- JOB 1: Light Vehicle Driver -->
+                <div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="uyo">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-corporate">Light Vehicle Driver</h3>
+                            <div class="flex flex-wrap gap-2 mt-1">
+                                <span class="badge-location"><i class="fas fa-map-marker-alt mr-1"></i>Uyo, Akwa Ibom</span>
+                                <span class="badge">Full-Time</span>
+                                <span class="text-xs text-gray-500"><i class="fas fa-bed mr-1"></i>Accommodation Available</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-primary text-sm font-medium toggle-indicator"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                    </div>
+                    <div class="job-details">
+                        <div class="job-details-content">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-tasks text-primary mr-2"></i>Responsibilities</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Conversant knowledge of routes through Uyo and its environs</li>
+                                        <li>Schedule regular car appointments and report any issues</li>
+                                        <li>Ensure the vehicle is clean at all times and comfortable for all riders</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-check-circle text-primary mr-2"></i>Requirements</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Proven experience as a driver and a valid driver's license</li>
+                                        <li>Resident around Uyo environs</li>
+                                        <li>Ability to lift heavy packages and luggage</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20Light%20Vehicle%20Driver" class="apply-btn">
+                                    <i class="fas fa-envelope mr-2"></i>Apply Now
+                                </a>
+                                <p class="text-xs text-gray-400 mt-2">Send your CV to: recruitment@verdantacreslimited.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JOB 2: Personal Assistant -->
+                <div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="uyo">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-corporate">Personal Assistant</h3>
+                            <div class="flex flex-wrap gap-2 mt-1">
+                                <span class="badge-location"><i class="fas fa-map-marker-alt mr-1"></i>Uyo, Akwa Ibom</span>
+                                <span class="badge">Full-Time</span>
+                                <span class="text-xs text-gray-500"><i class="fas fa-bed mr-1"></i>Accommodation Available</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-primary text-sm font-medium toggle-indicator"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                    </div>
+                    <div class="job-details">
+                        <div class="job-details-content">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-tasks text-primary mr-2"></i>Responsibilities</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Act as the point of contact between manager and internal/external clients</li>
+                                        <li>Screen and direct phone calls and distribute correspondence</li>
+                                        <li>Handle requests and queries appropriately</li>
+                                        <li>Manage diary and schedule meetings and appointments</li>
+                                        <li>Make travel arrangements and take dictation</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-check-circle text-primary mr-2"></i>Requirements</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Bachelor's degree in Business Administration or related field</li>
+                                        <li>Proven work experience as a Personal Assistant (2-3 years)</li>
+                                        <li>Knowledge of Office management systems and procedures</li>
+                                        <li>Proficient in Microsoft Office suite</li>
+                                        <li>Excellent communication skills (written & verbal)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20Personal%20Assistant" class="apply-btn">
+                                    <i class="fas fa-envelope mr-2"></i>Apply Now
+                                </a>
+                                <p class="text-xs text-gray-400 mt-2">Send your CV to: recruitment@verdantacreslimited.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JOB 3: Executive Assistant -->
+                <div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="lagos">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-corporate">Executive Assistant</h3>
+                            <div class="flex flex-wrap gap-2 mt-1">
+                                <span class="badge-location"><i class="fas fa-map-marker-alt mr-1"></i>Lagos State</span>
+                                <span class="badge">Full-Time</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-primary text-sm font-medium toggle-indicator"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                    </div>
+                    <div class="job-details">
+                        <div class="job-details-content">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-tasks text-primary mr-2"></i>Responsibilities</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Point of contact between executive and internal/external stakeholders</li>
+                                        <li>Manage schedules, meetings, and appointments</li>
+                                        <li>Prepare reports, presentations, and technical documentation</li>
+                                        <li>Coordinate travel and logistics</li>
+                                        <li>Handle confidential information with discretion</li>
+                                        <li>Knowledge of Fund Raising</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-check-circle text-primary mr-2"></i>Requirements</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>BSc/HND in Business Administration, Engineering, or related field</li>
+                                        <li>Proven experience as Executive/Technical Assistant</li>
+                                        <li>Proficient in Microsoft Office suite, Canvas, PDF, AI</li>
+                                        <li>Strong problem-solving and technical aptitude</li>
+                                        <li>Willing to travel</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20Executive%20Assistant" class="apply-btn">
+                                    <i class="fas fa-envelope mr-2"></i>Apply Now
+                                </a>
+                                <p class="text-xs text-gray-400 mt-2">Send your CV to: recruitment@verdantacreslimited.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JOB 4: Procurement Officer -->
+                <div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="uyo">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-corporate">Procurement Officer</h3>
+                            <div class="flex flex-wrap gap-2 mt-1">
+                                <span class="badge-location"><i class="fas fa-map-marker-alt mr-1"></i>Uyo, Akwa Ibom</span>
+                                <span class="badge">Full-Time</span>
+                                <span class="text-xs text-gray-500"><i class="fas fa-bed mr-1"></i>Accommodation Available</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-primary text-sm font-medium toggle-indicator"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                    </div>
+                    <div class="job-details">
+                        <div class="job-details-content">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-tasks text-primary mr-2"></i>Responsibilities</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Source and evaluate suppliers for raw materials and equipment</li>
+                                        <li>Prepare purchase orders and ensure timely procurement</li>
+                                        <li>Negotiate contracts, pricing, and delivery terms with vendors</li>
+                                        <li>Monitor stock levels and coordinate with production teams</li>
+                                        <li>Maintain procurement records and supplier databases</li>
+                                        <li>Ensure compliance with company procurement policies</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-check-circle text-primary mr-2"></i>Requirements</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Degree in Supply Chain Management, Business Admin, or related field</li>
+                                        <li>Proven experience in procurement (manufacturing/agriculture preferred)</li>
+                                        <li>Strong negotiation and vendor management skills</li>
+                                        <li>Knowledge of inventory management practices</li>
+                                        <li>Proficient in Microsoft Office and procurement software</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20Procurement%20Officer" class="apply-btn">
+                                    <i class="fas fa-envelope mr-2"></i>Apply Now
+                                </a>
+                                <p class="text-xs text-gray-400 mt-2">Send your CV to: recruitment@verdantacreslimited.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JOB 5: Sales & Marketing Executive - North & South -->
+                <div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="uyo">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-corporate">Sales & Marketing Executive - North & South Region</h3>
+                            <div class="flex flex-wrap gap-2 mt-1">
+                                <span class="badge-location"><i class="fas fa-map-marker-alt mr-1"></i>Uyo, Akwa Ibom</span>
+                                <span class="badge">Full-Time</span>
+                                <span class="text-xs text-gray-500"><i class="fas fa-bed mr-1"></i>Accommodation Available</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-primary text-sm font-medium toggle-indicator"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                    </div>
+                    <div class="job-details">
+                        <div class="job-details-content">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-tasks text-primary mr-2"></i>Responsibilities</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Develop and implement sales strategies for coconut products</li>
+                                        <li>Identify and pursue new business opportunities and markets</li>
+                                        <li>Maintain relationships with distributors, retailers, and bulk buyers</li>
+                                        <li>Conduct market research to identify trends and customer needs</li>
+                                        <li>Prepare sales reports, forecasts, and performance analyses</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-check-circle text-primary mr-2"></i>Requirements</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Degree in Marketing, Business Admin, or related field</li>
+                                        <li>Proven experience in sales and marketing (FMCG/agro-processing preferred)</li>
+                                        <li>Strong negotiation and presentation skills</li>
+                                        <li>Knowledge of digital marketing tools and platforms</li>
+                                        <li>Self-motivated with target-driven mindset</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20Sales%20%26%20Marketing%20Executive" class="apply-btn">
+                                    <i class="fas fa-envelope mr-2"></i>Apply Now
+                                </a>
+                                <p class="text-xs text-gray-400 mt-2">Send your CV to: recruitment@verdantacreslimited.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JOB 6: Quality Control Officer -->
+                <div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="uyo">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-corporate">Quality Control Officer</h3>
+                            <div class="flex flex-wrap gap-2 mt-1">
+                                <span class="badge-location"><i class="fas fa-map-marker-alt mr-1"></i>Uyo, Akwa Ibom</span>
+                                <span class="badge">Full-Time</span>
+                                <span class="text-xs text-gray-500"><i class="fas fa-bed mr-1"></i>Accommodation Available</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-primary text-sm font-medium toggle-indicator"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                    </div>
+                    <div class="job-details">
+                        <div class="job-details-content">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-tasks text-primary mr-2"></i>Responsibilities</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Monitor production processes to ensure quality standards</li>
+                                        <li>Inspect coconuts and finished products for defects</li>
+                                        <li>Conduct routine quality tests and document results</li>
+                                        <li>Ensure hygiene and safety standards are maintained</li>
+                                        <li>Support audits and certification processes</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-check-circle text-primary mr-2"></i>Requirements</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Degree in Food Science, Microbiology, Quality Assurance, or related field</li>
+                                        <li>Experience in quality control within manufacturing or agriculture</li>
+                                        <li>Knowledge of food safety and quality standards</li>
+                                        <li>Strong analytical and problem-solving skills</li>
+                                        <li>Attention to detail and accuracy in reporting</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20Quality%20Control%20Officer" class="apply-btn">
+                                    <i class="fas fa-envelope mr-2"></i>Apply Now
+                                </a>
+                                <p class="text-xs text-gray-400 mt-2">Send your CV to: recruitment@verdantacreslimited.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JOB 7: Head Human Resources -->
+                <div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="uyo">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-corporate">Head Human Resources</h3>
+                            <div class="flex flex-wrap gap-2 mt-1">
+                                <span class="badge-location"><i class="fas fa-map-marker-alt mr-1"></i>Uyo, Akwa Ibom</span>
+                                <span class="badge">Full-Time</span>
+                                <span class="text-xs text-gray-500"><i class="fas fa-bed mr-1"></i>Accommodation Available</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-primary text-sm font-medium toggle-indicator"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                    </div>
+                    <div class="job-details">
+                        <div class="job-details-content">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-tasks text-primary mr-2"></i>Responsibilities</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Develop and implement HR strategies aligned with business strategy</li>
+                                        <li>Bridge management and employee relations</li>
+                                        <li>Manage the recruitment and selection process</li>
+                                        <li>Develop and monitor overall HR strategies and procedures</li>
+                                        <li>Nurture a positive working environment</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-check-circle text-primary mr-2"></i>Requirements</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Degree in Human Resources or related field</li>
+                                        <li>Proven experience as HR Manager or other HR Executive</li>
+                                        <li>People oriented and results driven</li>
+                                        <li>Knowledge of HR systems and databases</li>
+                                        <li>In-depth knowledge of labor law and HR best practices</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20Head%20Human%20Resources" class="apply-btn">
+                                    <i class="fas fa-envelope mr-2"></i>Apply Now
+                                </a>
+                                <p class="text-xs text-gray-400 mt-2">Send your CV to: recruitment@verdantacreslimited.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JOB 8: Facility/Admin Officer -->
+                <div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="uyo">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-corporate">Facility/Admin Officer</h3>
+                            <div class="flex flex-wrap gap-2 mt-1">
+                                <span class="badge-location"><i class="fas fa-map-marker-alt mr-1"></i>Uyo, Akwa Ibom</span>
+                                <span class="badge">Full-Time</span>
+                                <span class="text-xs text-gray-500"><i class="fas fa-bed mr-1"></i>Accommodation Available</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-primary text-sm font-medium toggle-indicator"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                    </div>
+                    <div class="job-details">
+                        <div class="job-details-content">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-tasks text-primary mr-2"></i>Responsibilities</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Coordinate office activities and operations</li>
+                                        <li>Supervise administrative staff</li>
+                                        <li>Manage agendas/travel arrangements for upper management</li>
+                                        <li>Support budgeting and bookkeeping procedures</li>
+                                        <li>Create and update records and databases</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-check-circle text-primary mr-2"></i>Requirements</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>BSc/BA in office administration or relevant field</li>
+                                        <li>Proven experience as an admin officer or relevant role</li>
+                                        <li>Outstanding communication and interpersonal abilities</li>
+                                        <li>Excellent organizational and leadership skills</li>
+                                        <li>Excellent knowledge of MS Office and office management software</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20Facility%2FAdmin%20Officer" class="apply-btn">
+                                    <i class="fas fa-envelope mr-2"></i>Apply Now
+                                </a>
+                                <p class="text-xs text-gray-400 mt-2">Send your CV to: recruitment@verdantacreslimited.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JOB 9: Front Desk Officer -->
+                <div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="uyo">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-corporate">Front Desk Officer</h3>
+                            <div class="flex flex-wrap gap-2 mt-1">
+                                <span class="badge-location"><i class="fas fa-map-marker-alt mr-1"></i>Uyo, Akwa Ibom</span>
+                                <span class="badge">Full-Time</span>
+                                <span class="text-xs text-gray-500"><i class="fas fa-bed mr-1"></i>Accommodation Available</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-primary text-sm font-medium toggle-indicator"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                    </div>
+                    <div class="job-details">
+                        <div class="job-details-content">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-tasks text-primary mr-2"></i>Responsibilities</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Greet and welcome visitors, clients, and employees</li>
+                                        <li>Answer incoming phone calls and direct appropriately</li>
+                                        <li>Manage appointments and schedules</li>
+                                        <li>Receive, sort, and distribute mail and packages</li>
+                                        <li>Handle customer complaints with professionalism</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-check-circle text-primary mr-2"></i>Requirements</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>High school diploma or equivalent</li>
+                                        <li>Previous experience in front desk or receptionist role</li>
+                                        <li>Excellent verbal and written communication skills</li>
+                                        <li>Friendly and professional demeanor</li>
+                                        <li>Proficiency in basic office software</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20Front%20Desk%20Officer" class="apply-btn">
+                                    <i class="fas fa-envelope mr-2"></i>Apply Now
+                                </a>
+                                <p class="text-xs text-gray-400 mt-2">Send your CV to: recruitment@verdantacreslimited.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JOB 10: Coconut Production & Maintenance Supervisor -->
+                <div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="uyo">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-corporate">Coconut Production & Maintenance Supervisor</h3>
+                            <div class="flex flex-wrap gap-2 mt-1">
+                                <span class="badge-location"><i class="fas fa-map-marker-alt mr-1"></i>Uyo, Akwa Ibom</span>
+                                <span class="badge">Full-Time</span>
+                                <span class="text-xs text-gray-500"><i class="fas fa-bed mr-1"></i>Accommodation Available</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-primary text-sm font-medium toggle-indicator"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                    </div>
+                    <div class="job-details">
+                        <div class="job-details-content">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-tasks text-primary mr-2"></i>Responsibilities</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Supervise and lead a team of production workers and maintenance technicians</li>
+                                        <li>Assign tasks and provide guidance and training</li>
+                                        <li>Develop and implement schedules for production and maintenance</li>
+                                        <li>Ensure compliance with safety regulations and industry standards</li>
+                                        <li>Conduct regular safety inspections and audits</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-check-circle text-primary mr-2"></i>Requirements</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Degree in Mechanical Engineering or related field</li>
+                                        <li>5+ years experience in manufacturing production and maintenance</li>
+                                        <li>2+ years in a supervisory role</li>
+                                        <li>Excellent leadership and team management skills</li>
+                                        <li>Strong problem-solving and decision-making abilities</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20Production%20%26%20Maintenance%20Supervisor" class="apply-btn">
+                                    <i class="fas fa-envelope mr-2"></i>Apply Now
+                                </a>
+                                <p class="text-xs text-gray-400 mt-2">Send your CV to: recruitment@verdantacreslimited.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JOB 11: Store Keeper -->
+                <div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="uyo">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-corporate">Store Keeper</h3>
+                            <div class="flex flex-wrap gap-2 mt-1">
+                                <span class="badge-location"><i class="fas fa-map-marker-alt mr-1"></i>Uyo, Akwa Ibom</span>
+                                <span class="badge">Full-Time</span>
+                                <span class="text-xs text-gray-500"><i class="fas fa-bed mr-1"></i>Accommodation Available</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-primary text-sm font-medium toggle-indicator"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                    </div>
+                    <div class="job-details">
+                        <div class="job-details-content">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-tasks text-primary mr-2"></i>Responsibilities</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Keep a record of sales and restock the store accordingly</li>
+                                        <li>Manage and train store staff</li>
+                                        <li>Plan promotional campaigns for new products</li>
+                                        <li>Ensure the store is kept clean and organized</li>
+                                        <li>Mediate any confrontations between staff and clients</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-check-circle text-primary mr-2"></i>Requirements</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Organized and punctual</li>
+                                        <li>Well-presented and professional</li>
+                                        <li>High school qualification or equivalent</li>
+                                        <li>Prior experience in retail management preferred</li>
+                                        <li>Excellent verbal and written communication skills</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20Store%20Keeper" class="apply-btn">
+                                    <i class="fas fa-envelope mr-2"></i>Apply Now
+                                </a>
+                                <p class="text-xs text-gray-400 mt-2">Send your CV to: recruitment@verdantacreslimited.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JOB 12: Chief Security Officer -->
+                <div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="uyo">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-corporate">Chief Security Officer</h3>
+                            <div class="flex flex-wrap gap-2 mt-1">
+                                <span class="badge-location"><i class="fas fa-map-marker-alt mr-1"></i>Uyo, Akwa Ibom</span>
+                                <span class="badge">Full-Time</span>
+                                <span class="text-xs text-gray-500"><i class="fas fa-bed mr-1"></i>Accommodation Available</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-primary text-sm font-medium toggle-indicator"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                    </div>
+                    <div class="job-details">
+                        <div class="job-details-content">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-tasks text-primary mr-2"></i>Responsibilities</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Develop and implement security processes and policies</li>
+                                        <li>Identify and reduce risks, limiting liability</li>
+                                        <li>Oversee security staff including guards and desk clerks</li>
+                                        <li>Conduct regular walk-throughs and security inspections</li>
+                                        <li>Provide training on security policies and procedures</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-check-circle text-primary mr-2"></i>Requirements</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>First Degree or equivalent</li>
+                                        <li>Must be ex-service personnel</li>
+                                        <li>No more than 50 years old</li>
+                                        <li>Extensive knowledge of security protocol</li>
+                                        <li>Excellent management and supervisory skills</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20Chief%20Security%20Officer" class="apply-btn">
+                                    <i class="fas fa-envelope mr-2"></i>Apply Now
+                                </a>
+                                <p class="text-xs text-gray-400 mt-2">Send your CV to: recruitment@verdantacreslimited.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JOB 13: Accountant -->
+                <div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="uyo">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-corporate">Accountant</h3>
+                            <div class="flex flex-wrap gap-2 mt-1">
+                                <span class="badge-location"><i class="fas fa-map-marker-alt mr-1"></i>Uyo, Akwa Ibom</span>
+                                <span class="badge">Full-Time</span>
+                                <span class="text-xs text-gray-500"><i class="fas fa-bed mr-1"></i>Accommodation Available</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-primary text-sm font-medium toggle-indicator"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                    </div>
+                    <div class="job-details">
+                        <div class="job-details-content">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-tasks text-primary mr-2"></i>Responsibilities</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Manage all accounting transactions</li>
+                                        <li>Prepare budget forecasts</li>
+                                        <li>Publish financial statements in time</li>
+                                        <li>Handle monthly, quarterly and annual closings</li>
+                                        <li>Reconcile accounts payable and receivable</li>
+                                        <li>Audit financial transactions and documents</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-check-circle text-primary mr-2"></i>Requirements</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>BSc in Accounting, Finance or relevant degree</li>
+                                        <li>Proven work experience as an Accountant</li>
+                                        <li>Knowledge of GAAP and accounting regulations</li>
+                                        <li>Experience with SAGE, FreshBooks, QuickBooks</li>
+                                        <li>Advanced MS Excel skills (Vlookups, pivot tables)</li>
+                                        <li>CPA or CMA certification is a plus</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20Accountant" class="apply-btn">
+                                    <i class="fas fa-envelope mr-2"></i>Apply Now
+                                </a>
+                                <p class="text-xs text-gray-400 mt-2">Send your CV to: recruitment@verdantacreslimited.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JOB 14: Industrial Electrical Supervisor -->
+                <div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="uyo">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-corporate">Industrial Electrical Supervisor</h3>
+                            <div class="flex flex-wrap gap-2 mt-1">
+                                <span class="badge-location"><i class="fas fa-map-marker-alt mr-1"></i>Uyo, Akwa Ibom</span>
+                                <span class="badge">Full-Time</span>
+                                <span class="text-xs text-gray-500"><i class="fas fa-bed mr-1"></i>Accommodation Available</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-primary text-sm font-medium toggle-indicator"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                    </div>
+                    <div class="job-details">
+                        <div class="job-details-content">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-tasks text-primary mr-2"></i>Responsibilities</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Supervise and lead a team of electricians and electrical technicians</li>
+                                        <li>Assign tasks, supervise work, and provide training</li>
+                                        <li>Develop schedules for electrical projects and installations</li>
+                                        <li>Ensure all electrical work complies with safety regulations</li>
+                                        <li>Conduct regular safety inspections and audits</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-check-circle text-primary mr-2"></i>Requirements</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Degree in Electrical Engineering or related field</li>
+                                        <li>5+ years experience in electrical systems installation</li>
+                                        <li>2+ years in a supervisory role</li>
+                                        <li>Knowledge of electrical codes, regulations, and standards</li>
+                                        <li>Strong problem-solving and decision-making abilities</li>
+                                        <li>Willingness to work flexible hours</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20Electrical%20Supervisor" class="apply-btn">
+                                    <i class="fas fa-envelope mr-2"></i>Apply Now
+                                </a>
+                                <p class="text-xs text-gray-400 mt-2">Send your CV to: recruitment@verdantacreslimited.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JOB 15: Coconut Factory Mechanical Supervisor -->
+                <div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="uyo">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-corporate">Coconut Factory Mechanical Supervisor</h3>
+                            <div class="flex flex-wrap gap-2 mt-1">
+                                <span class="badge-location"><i class="fas fa-map-marker-alt mr-1"></i>Uyo, Akwa Ibom</span>
+                                <span class="badge">Full-Time</span>
+                                <span class="text-xs text-gray-500"><i class="fas fa-bed mr-1"></i>Accommodation Available</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-primary text-sm font-medium toggle-indicator"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                    </div>
+                    <div class="job-details">
+                        <div class="job-details-content">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-tasks text-primary mr-2"></i>Responsibilities</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Organize workflow by assigning responsibilities and preparing schedules</li>
+                                        <li>Ensure the safe use of equipment and schedule regular maintenance</li>
+                                        <li>Train new employees on safe machinery use and procedures</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-check-circle text-primary mr-2"></i>Requirements</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Diploma or degree in technical engineering or similar</li>
+                                        <li>Good oral and written communication skills</li>
+                                        <li>Knowledge of mechanic repairs and installations</li>
+                                        <li>Self-starter willing to live in rural farm locations</li>
+                                        <li>Proven experience as production supervisor in oil palm processing preferred</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20Mechanical%20Supervisor" class="apply-btn">
+                                    <i class="fas fa-envelope mr-2"></i>Apply Now
+                                </a>
+                                <p class="text-xs text-gray-400 mt-2">Send your CV to: recruitment@verdantacreslimited.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- No results message -->
+            <div id="no-results" class="text-center py-12 hidden">
+                <i class="fas fa-search text-4xl text-gray-300 mb-4"></i>
+                <p class="text-gray-500 text-lg">No positions available in this location.</p>
+                <p class="text-gray-400">Please check back later or view all positions.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW TO APPLY SECTION -->
+    <section class="py-16 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-black font-heading text-corporate mb-4">How to Apply</h2>
+            <div class="bg-surface rounded-2xl p-8 shadow-md">
+                <div class="flex flex-col md:flex-row gap-6 items-center justify-center">
+                    <div class="text-center md:text-left">
+                        <p class="text-gray-700 mb-2">
+                            <i class="fas fa-envelope text-primary mr-2"></i>
+                            Send your CV and cover letter to:
+                        </p>
+                        <p class="text-xl font-bold text-corporate">
+                            recruitment@verdantacreslimited.com
+                        </p>
+                        <p class="text-sm text-gray-500 mt-2">
+                            Please use the job title as the subject of your email
+                        </p>
+                    </div>
+                </div>
+                <div class="mt-6 flex flex-wrap justify-center gap-4 text-sm text-gray-600">
+                    <span><i class="fas fa-check-circle text-primary mr-1"></i> Only shortlisted candidates will be contacted</span>
+                    <span><i class="fas fa-check-circle text-primary mr-1"></i> CVs should be in PDF or Word format</span>
+                    <span><i class="fas fa-check-circle text-primary mr-1"></i> Accommodation available for most positions</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <Footer slot="footer" />
+
+    <script>
+        // Job card toggle functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const jobCards = document.querySelectorAll('.job-card');
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const noResults = document.getElementById('no-results');
+
+            // Toggle job details
+            jobCards.forEach(card => {
+                const indicator = card.querySelector('.toggle-indicator');
+                const details = card.querySelector('.job-details');
+                
+                card.addEventListener('click', (e) => {
+                    // Don't toggle if clicking on a link
+                    if (e.target.closest('a')) return;
+                    
+                    const isOpen = details.classList.contains('open');
+                    
+                    // Close all other job details
+                    document.querySelectorAll('.job-details.open').forEach(d => {
+                        if (d !== details) {
+                            d.classList.remove('open');
+                            d.closest('.job-card').classList.remove('active');
+                            const otherIndicator = d.closest('.job-card').querySelector('.toggle-indicator');
+                            if (otherIndicator) {
+                                otherIndicator.innerHTML = '<i class="fas fa-chevron-down"></i>';
+                            }
+                        }
+                    });
+                    
+                    // Toggle current
+                    if (isOpen) {
+                        details.classList.remove('open');
+                        card.classList.remove('active');
+                        indicator.innerHTML = '<i class="fas fa-chevron-down"></i>';
+                    } else {
+                        details.classList.add('open');
+                        card.classList.add('active');
+                        indicator.innerHTML = '<i class="fas fa-chevron-up"></i>';
+                    }
+                });
+            });
+
+            // Filter functionality
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Update active button
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    const filter = btn.dataset.filter;
+                    let visibleCount = 0;
+                    
+                    jobCards.forEach(card => {
+                        const location = card.dataset.location;
+                        if (filter === 'all' || location === filter) {
+                            card.style.display = '';
+                            visibleCount++;
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                    
+                    // Show/hide no results message
+                    if (visibleCount === 0) {
+                        noResults.classList.remove('hidden');
+                    } else {
+                        noResults.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</Layout>

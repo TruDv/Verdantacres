@@ -71,6 +71,14 @@ import Footer from '../components/Footer.astro';
             padding: 0.25rem 0.75rem;
             border-radius: 9999px;
         }
+        .badge-whatsapp {
+            background-color: #25D366;
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+        }
         .filter-btn {
             transition: all 0.3s ease;
             padding: 0.5rem 1.25rem;
@@ -101,6 +109,20 @@ import Footer from '../components/Footer.astro';
         }
         .apply-btn:hover {
             background-color: var(--color-primary);
+            transform: scale(1.02);
+        }
+        .apply-btn-whatsapp {
+            background-color: #25D366;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        .apply-btn-whatsapp:hover {
+            background-color: #128C7E;
             transform: scale(1.02);
         }
         .section-title {
@@ -185,6 +207,7 @@ import Footer from '../components/Footer.astro';
                     <button class="filter-btn active" data-filter="all">All</button>
                     <button class="filter-btn" data-filter="uyo">Uyo</button>
                     <button class="filter-btn" data-filter="lagos">Lagos</button>
+                    <button class="filter-btn" data-filter="abuja">Abuja</button>
                 </div>
             </div>
 
@@ -227,10 +250,10 @@ import Footer from '../components/Footer.astro';
                                 </div>
                             </div>
                             <div class="mt-4 text-center">
-                                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20Light%20Vehicle%20Driver" class="apply-btn">
-                                    <i class="fas fa-envelope mr-2"></i>Apply Now
+                                <a href="https://wa.me/2349133727786?text=I%20am%20interested%20in%20the%20Light%20Vehicle%20Driver%20position" target="_blank" class="apply-btn-whatsapp">
+                                    <i class="fab fa-whatsapp mr-2"></i>Apply via WhatsApp
                                 </a>
-                                <p class="text-xs text-gray-400 mt-2">Send your CV to: recruitment@verdantacreslimited.com</p>
+                                <p class="text-xs text-gray-400 mt-2">Send CV to WhatsApp: 09133727786</p>
                             </div>
                         </div>
                     </div>
@@ -262,6 +285,7 @@ import Footer from '../components/Footer.astro';
                                         <li>Handle requests and queries appropriately</li>
                                         <li>Manage diary and schedule meetings and appointments</li>
                                         <li>Make travel arrangements and take dictation</li>
+                                        <li>Conduct research and provide information as needed</li>
                                     </ul>
                                 </div>
                                 <div>
@@ -272,6 +296,7 @@ import Footer from '../components/Footer.astro';
                                         <li>Knowledge of Office management systems and procedures</li>
                                         <li>Proficient in Microsoft Office suite</li>
                                         <li>Excellent communication skills (written & verbal)</li>
+                                        <li>Competent in social media management</li>
                                     </ul>
                                 </div>
                             </div>
@@ -321,6 +346,7 @@ import Footer from '../components/Footer.astro';
                                         <li>Proficient in Microsoft Office suite, Canvas, PDF, AI</li>
                                         <li>Strong problem-solving and technical aptitude</li>
                                         <li>Willing to travel</li>
+                                        <li>Ability to work independently and under pressure</li>
                                     </ul>
                                 </div>
                             </div>
@@ -361,6 +387,7 @@ import Footer from '../components/Footer.astro';
                                         <li>Monitor stock levels and coordinate with production teams</li>
                                         <li>Maintain procurement records and supplier databases</li>
                                         <li>Ensure compliance with company procurement policies</li>
+                                        <li>Inspect delivered goods for quality and accuracy</li>
                                     </ul>
                                 </div>
                                 <div>
@@ -371,6 +398,7 @@ import Footer from '../components/Footer.astro';
                                         <li>Strong negotiation and vendor management skills</li>
                                         <li>Knowledge of inventory management practices</li>
                                         <li>Proficient in Microsoft Office and procurement software</li>
+                                        <li>Excellent organizational and communication skills</li>
                                     </ul>
                                 </div>
                             </div>
@@ -384,15 +412,14 @@ import Footer from '../components/Footer.astro';
                     </div>
                 </div>
 
-                <!-- JOB 5: Sales & Marketing Executive - North & South -->
-                <div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="uyo">
+                <!-- JOB 5: Sales & Marketing Executive - North Region -->
+                <div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="abuja">
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
                         <div class="flex-1">
-                            <h3 class="text-lg font-bold text-corporate">Sales & Marketing Executive - North & South Region</h3>
+                            <h3 class="text-lg font-bold text-corporate">Sales & Marketing Executive - North Region</h3>
                             <div class="flex flex-wrap gap-2 mt-1">
-                                <span class="badge-location"><i class="fas fa-map-marker-alt mr-1"></i>Uyo, Akwa Ibom</span>
+                                <span class="badge-location"><i class="fas fa-map-marker-alt mr-1"></i>Abuja & Environs</span>
                                 <span class="badge">Full-Time</span>
-                                <span class="text-xs text-gray-500"><i class="fas fa-bed mr-1"></i>Accommodation Available</span>
                             </div>
                         </div>
                         <div class="flex items-center gap-3">
@@ -410,6 +437,7 @@ import Footer from '../components/Footer.astro';
                                         <li>Maintain relationships with distributors, retailers, and bulk buyers</li>
                                         <li>Conduct market research to identify trends and customer needs</li>
                                         <li>Prepare sales reports, forecasts, and performance analyses</li>
+                                        <li>Coordinate product promotions, exhibitions, and brand campaigns</li>
                                     </ul>
                                 </div>
                                 <div>
@@ -424,7 +452,7 @@ import Footer from '../components/Footer.astro';
                                 </div>
                             </div>
                             <div class="mt-4 text-center">
-                                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20Sales%20%26%20Marketing%20Executive" class="apply-btn">
+                                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20Sales%20%26%20Marketing%20Executive%20-%20North%20Region" class="apply-btn">
                                     <i class="fas fa-envelope mr-2"></i>Apply Now
                                 </a>
                                 <p class="text-xs text-gray-400 mt-2">Send your CV to: recruitment@verdantacreslimited.com</p>
@@ -508,6 +536,8 @@ import Footer from '../components/Footer.astro';
                                         <li>Manage the recruitment and selection process</li>
                                         <li>Develop and monitor overall HR strategies and procedures</li>
                                         <li>Nurture a positive working environment</li>
+                                        <li>Oversee performance appraisal system</li>
+                                        <li>Ensure legal compliance throughout human resource management</li>
                                     </ul>
                                 </div>
                                 <div>
@@ -557,6 +587,7 @@ import Footer from '../components/Footer.astro';
                                         <li>Manage agendas/travel arrangements for upper management</li>
                                         <li>Support budgeting and bookkeeping procedures</li>
                                         <li>Create and update records and databases</li>
+                                        <li>Track stocks of office supplies</li>
                                     </ul>
                                 </div>
                                 <div>
@@ -606,6 +637,7 @@ import Footer from '../components/Footer.astro';
                                         <li>Manage appointments and schedules</li>
                                         <li>Receive, sort, and distribute mail and packages</li>
                                         <li>Handle customer complaints with professionalism</li>
+                                        <li>Monitor and manage visitor log and security access</li>
                                     </ul>
                                 </div>
                                 <div>
@@ -629,7 +661,7 @@ import Footer from '../components/Footer.astro';
                     </div>
                 </div>
 
-                <!-- JOB 10: Coconut Production & Maintenance Supervisor -->
+                <!-- JOB 10: Coconut Production & Maintenance Manager -->
                 <div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="uyo">
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
                         <div class="flex-1">
@@ -655,6 +687,7 @@ import Footer from '../components/Footer.astro';
                                         <li>Develop and implement schedules for production and maintenance</li>
                                         <li>Ensure compliance with safety regulations and industry standards</li>
                                         <li>Conduct regular safety inspections and audits</li>
+                                        <li>Monitor and manage inventory and supplies</li>
                                     </ul>
                                 </div>
                                 <div>
@@ -665,6 +698,7 @@ import Footer from '../components/Footer.astro';
                                         <li>2+ years in a supervisory role</li>
                                         <li>Excellent leadership and team management skills</li>
                                         <li>Strong problem-solving and decision-making abilities</li>
+                                        <li>Experience working in an Oil Mill is an advantage</li>
                                     </ul>
                                 </div>
                             </div>
@@ -753,6 +787,7 @@ import Footer from '../components/Footer.astro';
                                         <li>Oversee security staff including guards and desk clerks</li>
                                         <li>Conduct regular walk-throughs and security inspections</li>
                                         <li>Provide training on security policies and procedures</li>
+                                        <li>Take proactive steps to provide safe working environment</li>
                                     </ul>
                                 </div>
                                 <div>
@@ -763,6 +798,7 @@ import Footer from '../components/Footer.astro';
                                         <li>No more than 50 years old</li>
                                         <li>Extensive knowledge of security protocol</li>
                                         <li>Excellent management and supervisory skills</li>
+                                        <li>Willing to live in rural farm locations</li>
                                     </ul>
                                 </div>
                             </div>
@@ -853,6 +889,7 @@ import Footer from '../components/Footer.astro';
                                         <li>Develop schedules for electrical projects and installations</li>
                                         <li>Ensure all electrical work complies with safety regulations</li>
                                         <li>Conduct regular safety inspections and audits</li>
+                                        <li>Monitor and manage electrical inventory and supplies</li>
                                     </ul>
                                 </div>
                                 <div>
@@ -924,169 +961,168 @@ import Footer from '../components/Footer.astro';
                     </div>
                 </div>
 
-            </div>
+                <!-- JOB 16: Head of Sales & Strategy - South Region -->
+                <div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="uyo">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-corporate">Head of Sales & Strategy - South Region</h3>
+                            <div class="flex flex-wrap gap-2 mt-1">
+                                <span class="badge-location"><i class="fas fa-map-marker-alt mr-1"></i>Uyo & Environs</span>
+                                <span class="badge">Full-Time</span>
+                                <span class="text-xs text-gray-500"><i class="fas fa-bed mr-1"></i>Accommodation Available (Uyo only)</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-primary text-sm font-medium toggle-indicator"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                    </div>
+                    <div class="job-details">
+                        <div class="job-details-content">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-tasks text-primary mr-2"></i>Responsibilities</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Develop and implement the company's overall sales and growth strategy across all regions</li>
+                                        <li>Lead and supervise regional sales teams to achieve sales targets</li>
+                                        <li>Identify new markets, customers, distributors, and business opportunities</li>
+                                        <li>Build and maintain relationships with key customers and business partners</li>
+                                        <li>Monitor regional sales performance, forecasts, and market trends</li>
+                                        <li>Develop strategies to increase revenue, market share, and customer base</li>
+                                        <li>Oversee product pricing, promotions, distribution, and market expansion</li>
+                                        <li>Collaborate with production and supply teams to align stock with market demand</li>
+                                        <li>Prepare sales reports and provide strategic recommendations to management</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-check-circle text-primary mr-2"></i>Requirements</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Bachelor's degree in Marketing, Business Administration, Sales, or related field</li>
+                                        <li>Proven experience in sales leadership, business development, or strategy</li>
+                                        <li>Experience managing sales teams across multiple regions</li>
+                                        <li>Strong leadership, negotiation, communication, and analytical skills</li>
+                                        <li>Target-driven with strong business development and strategic thinking abilities</li>
+                                        <li>Willingness to travel across regions as required</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20Head%20of%20Sales%20%26%20Strategy%20-%20South%20Region" class="apply-btn">
+                                    <i class="fas fa-envelope mr-2"></i>Apply Now
+                                </a>
+                                <p class="text-xs text-gray-400 mt-2">Send your CV to: recruitment@verdantacreslimited.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <!-- JOB 16: Head of Sales & Strategy -->
-<div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="uyo">
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
-        <div class="flex-1">
-            <h3 class="text-lg font-bold text-corporate">Head of Sales & Strategy</h3>
-            <div class="flex flex-wrap gap-2 mt-1">
-                <span class="badge-location"><i class="fas fa-map-marker-alt mr-1"></i>Uyo, Akwa Ibom</span>
-                <span class="badge">Full-Time</span>
-                <span class="text-xs text-gray-500"><i class="fas fa-bed mr-1"></i>Accommodation Available</span>
-            </div>
-        </div>
-        <div class="flex items-center gap-3">
-            <span class="text-primary text-sm font-medium toggle-indicator"><i class="fas fa-chevron-down"></i></span>
-        </div>
-    </div>
-    <div class="job-details">
-        <div class="job-details-content">
-            <div class="grid md:grid-cols-2 gap-6">
-                <div>
-                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-tasks text-primary mr-2"></i>Responsibilities</h4>
-                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
-                        <li>Develop and implement the company's overall sales and growth strategy across all regions</li>
-                        <li>Lead and supervise regional sales teams to achieve sales targets</li>
-                        <li>Identify new markets, customers, distributors, and business opportunities</li>
-                        <li>Build and maintain relationships with key customers and business partners</li>
-                        <li>Monitor regional sales performance, forecasts, and market trends</li>
-                        <li>Develop strategies to increase revenue, market share, and customer base</li>
-                        <li>Oversee product pricing, promotions, distribution, and market expansion</li>
-                        <li>Collaborate with production and supply teams to align stock with market demand</li>
-                        <li>Prepare sales reports and provide strategic recommendations to management</li>
-                        <li>Drive company-wide sales performance and business growth</li>
-                    </ul>
+                <!-- JOB 17: Brand & Marketing Executive -->
+                <div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="uyo">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-corporate">Brand & Marketing Executive</h3>
+                            <div class="flex flex-wrap gap-2 mt-1">
+                                <span class="badge-location"><i class="fas fa-map-marker-alt mr-1"></i>Uyo, Akwa Ibom</span>
+                                <span class="badge">Full-Time</span>
+                                <span class="text-xs text-gray-500"><i class="fas fa-bed mr-1"></i>Accommodation Available</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-primary text-sm font-medium toggle-indicator"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                    </div>
+                    <div class="job-details">
+                        <div class="job-details-content">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-tasks text-primary mr-2"></i>Responsibilities</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Develop and execute brand strategy</li>
+                                        <li>Create and manage marketing campaigns (online & offline)</li>
+                                        <li>Manage social media platforms & content calendar</li>
+                                        <li>Drive lead generation and customer acquisition</li>
+                                        <li>Coordinate promotional events & activations</li>
+                                        <li>Monitor market trends and competitor activities</li>
+                                        <li>Track campaign performance & prepare reports</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-check-circle text-primary mr-2"></i>Requirements</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>BSc/HND in Marketing, Business Admin or related field</li>
+                                        <li>2-4 years experience in branding/marketing</li>
+                                        <li>Strong digital marketing & social media skills</li>
+                                        <li>Graphic design knowledge (Canva/Adobe is an advantage)</li>
+                                        <li>Excellent communication & presentation skills</li>
+                                        <li>Creative thinker with strong analytical ability</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20Brand%20%26%20Marketing%20Executive" class="apply-btn">
+                                    <i class="fas fa-envelope mr-2"></i>Apply Now
+                                </a>
+                                <p class="text-xs text-gray-400 mt-2">Send your CV to: recruitment@verdantacreslimited.com</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-check-circle text-primary mr-2"></i>Requirements</h4>
-                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
-                        <li>Bachelor's degree in Marketing, Business Administration, Sales, or related field</li>
-                        <li>Proven experience in sales leadership, business development, or strategy</li>
-                        <li>Experience managing sales teams across multiple regions</li>
-                        <li>Strong leadership, negotiation, communication, and analytical skills</li>
-                        <li>Target-driven with strong business development and strategic thinking abilities</li>
-                        <li>Willingness to travel across regions as required</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="mt-4 text-center">
-                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20Head%20of%20Sales%20%26%20Strategy" class="apply-btn">
-                    <i class="fas fa-envelope mr-2"></i>Apply Now
-                </a>
-                <p class="text-xs text-gray-400 mt-2">Send your CV to: recruitment@verdantacreslimited.com</p>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- JOB 17: Brand & Marketing Executive -->
-<div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="uyo">
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
-        <div class="flex-1">
-            <h3 class="text-lg font-bold text-corporate">Brand & Marketing Executive</h3>
-            <div class="flex flex-wrap gap-2 mt-1">
-                <span class="badge-location"><i class="fas fa-map-marker-alt mr-1"></i>Uyo, Akwa Ibom</span>
-                <span class="badge">Full-Time</span>
-                <span class="text-xs text-gray-500"><i class="fas fa-bed mr-1"></i>Accommodation Available</span>
-            </div>
-        </div>
-        <div class="flex items-center gap-3">
-            <span class="text-primary text-sm font-medium toggle-indicator"><i class="fas fa-chevron-down"></i></span>
-        </div>
-    </div>
-    <div class="job-details">
-        <div class="job-details-content">
-            <div class="grid md:grid-cols-2 gap-6">
-                <div>
-                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-tasks text-primary mr-2"></i>Responsibilities</h4>
-                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
-                        <li>Develop and execute brand strategy</li>
-                        <li>Create and manage marketing campaigns (online & offline)</li>
-                        <li>Manage social media platforms & content calendar</li>
-                        <li>Drive lead generation and customer acquisition</li>
-                        <li>Coordinate promotional events & activations</li>
-                        <li>Monitor market trends and competitor activities</li>
-                        <li>Track campaign performance & prepare reports</li>
-                    </ul>
+                <!-- JOB 18: IT Officer -->
+                <div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="uyo">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-corporate">IT Officer</h3>
+                            <div class="flex flex-wrap gap-2 mt-1">
+                                <span class="badge-location"><i class="fas fa-map-marker-alt mr-1"></i>Uyo, Akwa Ibom</span>
+                                <span class="badge">Full-Time</span>
+                                <span class="text-xs text-gray-500"><i class="fas fa-bed mr-1"></i>Accommodation Available</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-primary text-sm font-medium toggle-indicator"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                    </div>
+                    <div class="job-details">
+                        <div class="job-details-content">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-tasks text-primary mr-2"></i>Responsibilities</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>Manage and maintain company IT systems, hardware, software, and networks</li>
+                                        <li>Provide technical support and troubleshoot IT-related issues</li>
+                                        <li>Install and maintain computers, printers, routers, switches, and other IT equipment</li>
+                                        <li>Manage user accounts, emails, access permissions, and data backups</li>
+                                        <li>Monitor internet connectivity, system performance, and IT security</li>
+                                        <li>Maintain IT asset records and software licenses</li>
+                                        <li>Implement IT policies, security measures, and best practices</li>
+                                        <li>Liaise with external IT vendors and support digital operations</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-check-circle text-primary mr-2"></i>Requirements</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                        <li>B.Sc./HND in Computer Science, IT, Computer Engineering, or related field</li>
+                                        <li>2-4 years' experience in IT support or a similar role</li>
+                                        <li>Experience in a factory, manufacturing, or industrial environment is an advantage</li>
+                                        <li>Strong knowledge of hardware, software, networking, and troubleshooting</li>
+                                        <li>Proficiency in Microsoft Office/Microsoft 365 and Windows</li>
+                                        <li>Knowledge of cybersecurity, data backup, routers, switches, and firewalls</li>
+                                        <li>Strong problem-solving and communication skills</li>
+                                        <li>IT certifications such as CompTIA, CCNA, or ITIL are an advantage</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20IT%20Officer" class="apply-btn">
+                                    <i class="fas fa-envelope mr-2"></i>Apply Now
+                                </a>
+                                <p class="text-xs text-gray-400 mt-2">Send your CV to: recruitment@verdantacreslimited.com</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-check-circle text-primary mr-2"></i>Requirements</h4>
-                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
-                        <li>BSc/HND in Marketing, Business Admin or related field</li>
-                        <li>2-4 years experience in branding/marketing</li>
-                        <li>Strong digital marketing & social media skills</li>
-                        <li>Graphic design knowledge (Canva/Adobe is an advantage)</li>
-                        <li>Excellent communication & presentation skills</li>
-                        <li>Creative thinker with strong analytical ability</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="mt-4 text-center">
-                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20Brand%20%26%20Marketing%20Executive" class="apply-btn">
-                    <i class="fas fa-envelope mr-2"></i>Apply Now
-                </a>
-                <p class="text-xs text-gray-400 mt-2">Send your CV to: recruitment@verdantacreslimited.com</p>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- JOB 18: IT Officer -->
-<div class="job-card bg-white rounded-xl shadow-md border-l-4 border-primary p-4" data-location="uyo">
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
-        <div class="flex-1">
-            <h3 class="text-lg font-bold text-corporate">IT Officer</h3>
-            <div class="flex flex-wrap gap-2 mt-1">
-                <span class="badge-location"><i class="fas fa-map-marker-alt mr-1"></i>Uyo, Akwa Ibom</span>
-                <span class="badge">Full-Time</span>
-                <span class="text-xs text-gray-500"><i class="fas fa-bed mr-1"></i>Accommodation Available</span>
             </div>
-        </div>
-        <div class="flex items-center gap-3">
-            <span class="text-primary text-sm font-medium toggle-indicator"><i class="fas fa-chevron-down"></i></span>
-        </div>
-    </div>
-    <div class="job-details">
-        <div class="job-details-content">
-            <div class="grid md:grid-cols-2 gap-6">
-                <div>
-                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-tasks text-primary mr-2"></i>Responsibilities</h4>
-                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
-                        <li>Manage and maintain company IT systems, hardware, software, and networks</li>
-                        <li>Provide technical support and troubleshoot IT-related issues</li>
-                        <li>Install and maintain computers, printers, routers, switches, and other IT equipment</li>
-                        <li>Manage user accounts, emails, access permissions, and data backups</li>
-                        <li>Monitor internet connectivity, system performance, and IT security</li>
-                        <li>Maintain IT asset records and software licenses</li>
-                        <li>Implement IT policies, security measures, and best practices</li>
-                        <li>Liaise with external IT vendors and support digital operations</li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold text-corporate mb-2"><i class="fas fa-check-circle text-primary mr-2"></i>Requirements</h4>
-                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
-                        <li>B.Sc./HND in Computer Science, IT, Computer Engineering, or related field</li>
-                        <li>2-4 years' experience in IT support or a similar role</li>
-                        <li>Experience in a factory, manufacturing, or industrial environment is an advantage</li>
-                        <li>Strong knowledge of hardware, software, networking, and troubleshooting</li>
-                        <li>Proficiency in Microsoft Office/Microsoft 365 and Windows</li>
-                        <li>Knowledge of cybersecurity, data backup, routers, switches, and firewalls</li>
-                        <li>Strong problem-solving and communication skills</li>
-                        <li>IT certifications such as CompTIA, CCNA, or ITIL are an advantage</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="mt-4 text-center">
-                <a href="mailto:recruitment@verdantacreslimited.com?subject=Application%20for%20IT%20Officer" class="apply-btn">
-                    <i class="fas fa-envelope mr-2"></i>Apply Now
-                </a>
-                <p class="text-xs text-gray-400 mt-2">Send your CV to: recruitment@verdantacreslimited.com</p>
-            </div>
-        </div>
-    </div>
-</div>
 
             <!-- No results message -->
             <div id="no-results" class="text-center py-12 hidden">
@@ -1096,8 +1132,6 @@ import Footer from '../components/Footer.astro';
             </div>
         </div>
     </section>
-
-    
 
     <!-- HOW TO APPLY SECTION -->
     <section class="py-16 bg-white">
